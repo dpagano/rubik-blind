@@ -9,30 +9,6 @@ import java.util.stream.Collectors;
 
 public class Cube {
 
-	public static enum EColor {
-		WHITE((byte) 0), GREEN((byte) 1), ORANGE((byte) 2), BLUE((byte) 3), RED((byte) 4), YELLOW((byte) 5);
-
-		private final byte value;
-		private static final EColor[] colors = { WHITE, GREEN, ORANGE, BLUE, RED, YELLOW };
-
-		private EColor(byte value) {
-			this.value = value;
-		}
-
-		public byte getValue() {
-			return value;
-		}
-
-		public static EColor getColor(byte value) {
-			return colors[value];
-		}
-
-		@Override
-		public String toString() {
-			return name();
-		}
-	}
-
 	private EColor topFace;
 	private EColor frontFace;
 	private EColor rightFace;
@@ -169,7 +145,7 @@ public class Cube {
 	}
 
 	// TODO (DP): Extract one method with "rotationFace" and other two params
-	public void rotateCubeX(boolean clockwise, int numberOfRotations) {
+	public void rotateX(boolean clockwise, int numberOfRotations) {
 		List<EColor> adjacentColorsClockwise = getAdjacentColors(rightFace, clockwise);
 		int currentTopFace = adjacentColorsClockwise.indexOf(topFace);
 		topFace = adjacentColorsClockwise.get((currentTopFace + 4 - numberOfRotations) % 4);
@@ -177,7 +153,7 @@ public class Cube {
 		frontFace = adjacentColorsClockwise.get((currentFrontFace + 4 - numberOfRotations) % 4);
 	}
 
-	public void rotateCubeY(boolean clockwise, int numberOfRotations) {
+	public void rotateY(boolean clockwise, int numberOfRotations) {
 		List<EColor> adjacentColorsClockwise = getAdjacentColors(topFace, clockwise);
 		int currentRightFace = adjacentColorsClockwise.indexOf(rightFace);
 		rightFace = adjacentColorsClockwise.get((currentRightFace + 4 - numberOfRotations) % 4);
@@ -185,7 +161,7 @@ public class Cube {
 		frontFace = adjacentColorsClockwise.get((currentFrontFace + 4 - numberOfRotations) % 4);
 	}
 
-	public void rotateCubeZ(boolean clockwise, int numberOfRotations) {
+	public void rotateZ(boolean clockwise, int numberOfRotations) {
 		List<EColor> adjacentColorsClockwise = getAdjacentColors(frontFace, clockwise);
 		int currentRightFace = adjacentColorsClockwise.indexOf(rightFace);
 		rightFace = adjacentColorsClockwise.get((currentRightFace + 4 - numberOfRotations) % 4);
@@ -193,6 +169,7 @@ public class Cube {
 		topFace = adjacentColorsClockwise.get((currentTopFace + 4 - numberOfRotations) % 4);
 	}
 
+	// TODO (DP): Rename
 	public void interpret(String scrambleString) {
 		String[] moves = scrambleString.toUpperCase().split("\\s+");
 
@@ -231,26 +208,26 @@ public class Cube {
 		case "M":
 			performMove(rightFace, clockwise, numberOfRotations);
 			performMove(getOppositeFace(rightFace), !clockwise, numberOfRotations);
-			rotateCubeX(!clockwise, numberOfRotations);
+			rotateX(!clockwise, numberOfRotations);
 			break;
 		case "E":
 			performMove(topFace, clockwise, numberOfRotations);
 			performMove(getOppositeFace(topFace), !clockwise, numberOfRotations);
-			rotateCubeY(!clockwise, numberOfRotations);
+			rotateY(!clockwise, numberOfRotations);
 			break;
 		case "S":
 			performMove(frontFace, !clockwise, numberOfRotations);
 			performMove(getOppositeFace(frontFace), clockwise, numberOfRotations);
-			rotateCubeZ(clockwise, numberOfRotations);
+			rotateZ(clockwise, numberOfRotations);
 			break;
 		case "X":
-			rotateCubeX(clockwise, numberOfRotations);
+			rotateX(clockwise, numberOfRotations);
 			break;
 		case "Y":
-			rotateCubeY(clockwise, numberOfRotations);
+			rotateY(clockwise, numberOfRotations);
 			break;
 		case "Z":
-			rotateCubeZ(clockwise, numberOfRotations);
+			rotateZ(clockwise, numberOfRotations);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown move: " + move);

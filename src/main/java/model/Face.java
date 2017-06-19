@@ -2,8 +2,6 @@ package model;
 
 import org.junit.Assert;
 
-import model.Cube.EColor;
-
 public class Face {
 	private byte[][] pieces = new byte[3][3];
 	private byte faceColor;
@@ -45,7 +43,7 @@ public class Face {
 		if (clockwise) {
 			rotateClockwise();
 		} else {
-			rotateAntiClockwise();
+			rotateCounterClockwise();
 		}
 	}
 
@@ -59,7 +57,7 @@ public class Face {
 		swapPieces(2, 1, 1, 2);
 	}
 
-	public void rotateAntiClockwise() {
+	public void rotateCounterClockwise() {
 		swapPieces(0, 0, 0, 2);
 		swapPieces(0, 2, 2, 2);
 		swapPieces(2, 2, 2, 0);
@@ -102,7 +100,7 @@ public class Face {
 		test.rotateClockwise();
 
 		System.out.println(test);
-		test.rotateAntiClockwise();
+		test.rotateCounterClockwise();
 
 		System.out.println(test);
 	}
