@@ -1,16 +1,23 @@
 package model;
 
-import org.junit.Assert;
-
+/** A face of a 3x3 cube. */
 public class Face {
+	/** The pieces of the face as a two-dimensional array. */
 	private byte[][] pieces = new byte[3][3];
+
+	/**
+	 * The color of this face. The 3x3 face has one piece which "does not move".
+	 * This is the color of that piece.
+	 */
 	private byte faceColor;
 
+	/** Constructor. */
 	public Face(byte faceColor) {
 		this.faceColor = faceColor;
 		setAllPieces(faceColor);
 	}
 
+	/** Creates a copy of this face which has the same colors. */
 	public Face copy() {
 		Face copy = new Face(faceColor);
 		for (int x = 0; x < 3; x++) {
@@ -21,16 +28,23 @@ public class Face {
 		return copy;
 	}
 
+	/** Sets the piece with the specified coordinates to the specified color. */
 	void setPiece(int x, int y, byte color) {
-		Assert.assertTrue(x < 3 && y < 3);
+		if (x >= 3 || y >= 3) {
+			throw new CubeException("Cube size is 3x3.");
+		}
 		pieces[x][y] = color;
 	}
 
+	/** Gets the color of the piece with the specified coordinates. */
 	byte getPiece(int x, int y) {
-		Assert.assertTrue(x < 3 && y < 3);
+		if (x >= 3 || y >= 3) {
+			throw new CubeException("Cube size is 3x3.");
+		}
 		return pieces[x][y];
 	}
 
+	/** Sets all pieces of this face to the specified color. */
 	private void setAllPieces(byte color) {
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
@@ -39,6 +53,7 @@ public class Face {
 		}
 	}
 
+	/** Rotates this face. */
 	public void rotate(boolean clockwise) {
 		if (clockwise) {
 			rotateClockwise();
@@ -47,6 +62,11 @@ public class Face {
 		}
 	}
 
+	/**
+	 * Rotates this face clockwise. Rotation is currently done by swapping
+	 * pieces, as we now only handle 3x3 faces. We do not really gain from using
+	 * rotation matrices and vectors here.
+	 */
 	public void rotateClockwise() {
 		swapPieces(0, 2, 0, 0);
 		swapPieces(0, 0, 2, 0);
@@ -57,6 +77,7 @@ public class Face {
 		swapPieces(2, 1, 1, 2);
 	}
 
+	/** Rotates this face anti-clockwise. */
 	public void rotateCounterClockwise() {
 		swapPieces(0, 0, 0, 2);
 		swapPieces(0, 2, 2, 2);
@@ -67,6 +88,7 @@ public class Face {
 		swapPieces(2, 1, 1, 0);
 	}
 
+	/** Swaps the pieces with the specified coordinates. */
 	private void swapPieces(int x0, int y0, int x1, int y1) {
 		byte buffer = pieces[x0][y0];
 		pieces[x0][y0] = pieces[x1][y1];
