@@ -15,17 +15,17 @@ public class FaceTest {
 
 	@Before
 	public void before() {
-		face = new Face((byte) 0);
-		multiColoredFace = new Face((byte) 0);
-		multiColoredFace.setPiece(0, 0, (byte) 0);
-		multiColoredFace.setPiece(0, 1, (byte) 1);
-		multiColoredFace.setPiece(0, 2, (byte) 2);
-		multiColoredFace.setPiece(1, 0, (byte) 3);
-		multiColoredFace.setPiece(1, 1, (byte) 4);
-		multiColoredFace.setPiece(1, 2, (byte) 5);
-		multiColoredFace.setPiece(2, 0, (byte) 5);
-		multiColoredFace.setPiece(2, 1, (byte) 2);
-		multiColoredFace.setPiece(2, 2, (byte) 3);
+		face = new Face(EColor.WHITE);
+		multiColoredFace = new Face(EColor.WHITE);
+		multiColoredFace.setPiece(0, 0, EColor.WHITE);
+		multiColoredFace.setPiece(0, 1, EColor.GREEN);
+		multiColoredFace.setPiece(0, 2, EColor.ORANGE);
+		multiColoredFace.setPiece(1, 0, EColor.BLUE);
+		multiColoredFace.setPiece(1, 1, EColor.RED);
+		multiColoredFace.setPiece(1, 2, EColor.YELLOW);
+		multiColoredFace.setPiece(2, 0, EColor.YELLOW);
+		multiColoredFace.setPiece(2, 1, EColor.ORANGE);
+		multiColoredFace.setPiece(2, 2, EColor.RED);
 	}
 
 	@Test
@@ -35,14 +35,14 @@ public class FaceTest {
 
 	@Test
 	public void faceShouldGetAndSetCorrectColor() {
-		face.setPiece(2, 1, (byte) 3);
-		assertPiecesAreEqual(face.getPiece(2, 1), (byte) 3);
-		assertPiecesAreEqual(face.getPiece(0, 0), (byte) 0);
+		face.setPiece(2, 1, EColor.RED);
+		assertPiecesAreEqual(face.getPiece(2, 1), EColor.RED);
+		assertPiecesAreEqual(face.getPiece(0, 0), EColor.WHITE);
 	}
 
 	@Test(expected = CubeException.class)
 	public void faceShouldThrowExceptionForSetPieceOutOfBounds() {
-		face.setPiece(3, 3, (byte) 1);
+		face.setPiece(3, 3, EColor.GREEN);
 	}
 
 	@Test(expected = CubeException.class)
@@ -118,14 +118,13 @@ public class FaceTest {
 		}
 	}
 
-	private void assertPiecesAreEqual(byte firstPiece, byte secondPiece) {
+	private void assertPiecesAreEqual(EColor firstPiece, EColor secondPiece) {
 		Assert.assertTrue("Pieces are not equal: " + firstPiece + " & " + secondPiece,
 				piecesAreEqual(firstPiece, secondPiece));
 	}
 
-	private boolean piecesAreEqual(byte firstPiece, byte secondPiece) {
-		// TODO (DP): Switch to equals when we change to byte
-		return (firstPiece == secondPiece);
+	private boolean piecesAreEqual(EColor firstPiece, EColor secondPiece) {
+		return (firstPiece.equals(secondPiece));
 	}
 
 }
