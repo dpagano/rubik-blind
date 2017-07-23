@@ -3,7 +3,7 @@ package model;
 /** A face of a 3x3 cube. */
 public class Face {
 	/** The pieces of the face as a two-dimensional array. */
-	private EColor[][] pieces = new EColor[3][3];
+	private final EColor[][] pieces = new EColor[3][3];
 
 	/**
 	 * The color of this face. The 3x3 face has one piece which "does not move".
@@ -63,9 +63,9 @@ public class Face {
 	}
 
 	/**
-	 * Rotates this face clockwise. Rotation is currently done by swapping
-	 * pieces, as we now only handle 3x3 faces. We do not really gain from using
-	 * rotation matrices and vectors here.
+	 * Rotates this face clockwise. Rotation is currently done by swapping pieces,
+	 * as we now only handle 3x3 faces. We do not really gain from using rotation
+	 * matrices and vectors here.
 	 */
 	public void rotateClockwise() {
 		swapPieces(0, 2, 0, 0);
@@ -105,25 +105,5 @@ public class Face {
 			value += "\r\n";
 		}
 		return value;
-	}
-
-	public static void main(String[] args) {
-		Face test = new Face(EColor.RED);
-		System.out.println(test);
-
-		byte c = 0;
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
-				test.setPiece(x, y, EColor.getColor(c++));
-			}
-		}
-
-		System.out.println(test);
-		test.rotateClockwise();
-
-		System.out.println(test);
-		test.rotateCounterClockwise();
-
-		System.out.println(test);
 	}
 }
