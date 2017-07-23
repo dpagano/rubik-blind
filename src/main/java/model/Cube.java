@@ -5,19 +5,33 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
+/**
+ * A cube, which is able to rotate faces, interpret moves, and scramble.
+ *
+ * // TODO (DP): In the future, only rotation should be kept here.
+ * Interpretation and scrambling should be moved to extra classes.
+ */
 public class Cube {
 
+	/** The color of the face currently facing up. */
 	private EColor topFace;
+
+	/** The color of the face currently facing to the front. */
 	private EColor frontFace;
+
+	/** The color of the face currently facing to the right. */
 	private EColor rightFace;
 
-	private Face[] faces = new Face[6];
+	/** The faces of the cube. */
+	private static Face[] faces = new Face[6];
 
+	/** Constructor. */
 	public Cube() {
 		for (byte i = 0; i < 6; i++) {
-			faces[i] = new Face(i);
+			faces[i] = new Face(EColor.getColor(i));
 		}
 
 		topFace = EColor.WHITE;
@@ -25,11 +39,15 @@ public class Cube {
 		rightFace = EColor.RED;
 	}
 
+	/** Rotates the specified face. */
 	public void rotateFace(EColor face, boolean clockwise) {
 		faces[face.getValue()].rotate(clockwise);
 		rotateAdjacentFaces(face, clockwise);
 	}
 
+	/**
+	 * Rotates the adjacent pieces on the adjacent faces of the specified face.
+	 */
 	private void rotateAdjacentFaces(EColor face, boolean clockwise) {
 		List<EColor> adjacentFaces = new ArrayList<>(getAdjacentColors(face, !clockwise));
 
@@ -54,12 +72,13 @@ public class Cube {
 				if (faceIndex == 3) {
 					nextFace = buffer;
 				}
-				byte nextColor = nextFace.getPiece(nextIndexes[i][0], nextIndexes[i][1]);
+				EColor nextColor = nextFace.getPiece(nextIndexes[i][0], nextIndexes[i][1]);
 				faces[currentFaceColor.getValue()].setPiece(currentIndexes[i][0], currentIndexes[i][1], nextColor);
 			}
 		}
 	}
 
+	/** Gets the indexes of the pieces on the adjacent face. */
 	private int[][] getAdjacentIndexes(EColor face, EColor adjacentFace) {
 		if (face == EColor.WHITE || face == EColor.GREEN && adjacentFace == EColor.WHITE
 				|| face == EColor.GREEN && adjacentFace == EColor.YELLOW) {
@@ -90,9 +109,12 @@ public class Cube {
 			return new int[][] { { 2, 0 }, { 1, 0 }, { 0, 0 } };
 		}
 
-		throw new AssertionError("This should never happen.");
+		throw new CubeException("Faces are not adjacent: " + face + " and " + adjacentFace);
 	}
 
+	/**
+	 * Gets the adjacent colors of the specified face in the specified order.
+	 */
 	private List<EColor> getAdjacentColors(EColor face, boolean clockwise) {
 		List<EColor> colors;
 		switch (face) {
@@ -122,11 +144,11 @@ public class Cube {
 			Collections.reverse(colors);
 		}
 		return colors;
-
 	}
 
-	private EColor getOppositeFace(EColor face) {
-		switch (face) {
+	/** Gets the opposite color of the specified color. */
+	private EColor getOppositeFace(EColor color) {
+		switch (color) {
 		case WHITE:
 			return EColor.YELLOW;
 		case GREEN:
@@ -140,11 +162,12 @@ public class Cube {
 		case YELLOW:
 			return EColor.WHITE;
 		default:
-			throw new IllegalArgumentException("Unknown face: " + face);
+			throw new CubeException("Unknown color: " + color);
 		}
 	}
 
 	// TODO (DP): Extract one method with "rotationFace" and other two params
+	/** Rotates the cube along the X axis. */
 	public void rotateX(boolean clockwise, int numberOfRotations) {
 		List<EColor> adjacentColorsClockwise = getAdjacentColors(rightFace, clockwise);
 		int currentTopFace = adjacentColorsClockwise.indexOf(topFace);
@@ -153,6 +176,7 @@ public class Cube {
 		frontFace = adjacentColorsClockwise.get((currentFrontFace + 4 - numberOfRotations) % 4);
 	}
 
+	/** Rotates the cube along the Y axis. */
 	public void rotateY(boolean clockwise, int numberOfRotations) {
 		List<EColor> adjacentColorsClockwise = getAdjacentColors(topFace, clockwise);
 		int currentRightFace = adjacentColorsClockwise.indexOf(rightFace);
@@ -161,6 +185,7 @@ public class Cube {
 		frontFace = adjacentColorsClockwise.get((currentFrontFace + 4 - numberOfRotations) % 4);
 	}
 
+	/** Rotates the cube along the Z axis. */
 	public void rotateZ(boolean clockwise, int numberOfRotations) {
 		List<EColor> adjacentColorsClockwise = getAdjacentColors(frontFace, clockwise);
 		int currentRightFace = adjacentColorsClockwise.indexOf(rightFace);
@@ -170,6 +195,10 @@ public class Cube {
 	}
 
 	// TODO (DP): Rename
+	/**
+	 * Interprets the provided scramble string and performs the corresponding
+	 * moves on the cube.
+	 */
 	public void interpret(String scrambleString) {
 		String[] moves = scrambleString.toUpperCase().split("\\s+");
 
@@ -178,6 +207,9 @@ public class Cube {
 		}
 	}
 
+	/**
+	 * Interprets the provided move on the cube.
+	 */
 	private void interpretMove(String move) {
 		boolean clockwise = !move.endsWith("'");
 		int numberOfRotations = 1;
@@ -186,38 +218,39 @@ public class Cube {
 		}
 		String firstLetter = move.substring(0, 1);
 
+		// TODO (DP): Extract constants.
 		switch (firstLetter) {
 		case "U":
-			performMove(topFace, clockwise, numberOfRotations);
+			performRotation(topFace, clockwise, numberOfRotations);
 			break;
 		case "D":
-			performMove(getOppositeFace(topFace), clockwise, numberOfRotations);
+			performRotation(getOppositeFace(topFace), clockwise, numberOfRotations);
 			break;
 		case "F":
-			performMove(frontFace, clockwise, numberOfRotations);
+			performRotation(frontFace, clockwise, numberOfRotations);
 			break;
 		case "B":
-			performMove(getOppositeFace(frontFace), clockwise, numberOfRotations);
+			performRotation(getOppositeFace(frontFace), clockwise, numberOfRotations);
 			break;
 		case "R":
-			performMove(rightFace, clockwise, numberOfRotations);
+			performRotation(rightFace, clockwise, numberOfRotations);
 			break;
 		case "L":
-			performMove(getOppositeFace(rightFace), clockwise, numberOfRotations);
+			performRotation(getOppositeFace(rightFace), clockwise, numberOfRotations);
 			break;
 		case "M":
-			performMove(rightFace, clockwise, numberOfRotations);
-			performMove(getOppositeFace(rightFace), !clockwise, numberOfRotations);
+			performRotation(rightFace, clockwise, numberOfRotations);
+			performRotation(getOppositeFace(rightFace), !clockwise, numberOfRotations);
 			rotateX(!clockwise, numberOfRotations);
 			break;
 		case "E":
-			performMove(topFace, clockwise, numberOfRotations);
-			performMove(getOppositeFace(topFace), !clockwise, numberOfRotations);
+			performRotation(topFace, clockwise, numberOfRotations);
+			performRotation(getOppositeFace(topFace), !clockwise, numberOfRotations);
 			rotateY(!clockwise, numberOfRotations);
 			break;
 		case "S":
-			performMove(frontFace, !clockwise, numberOfRotations);
-			performMove(getOppositeFace(frontFace), clockwise, numberOfRotations);
+			performRotation(frontFace, !clockwise, numberOfRotations);
+			performRotation(getOppositeFace(frontFace), clockwise, numberOfRotations);
 			rotateZ(clockwise, numberOfRotations);
 			break;
 		case "X":
@@ -235,10 +268,100 @@ public class Cube {
 
 	}
 
-	private void performMove(EColor rotationFace, boolean clockwise, int numberOfRotations) {
+	/**
+	 * Performs the given number of rotations around the specified face in the
+	 * specified direction.
+	 */
+	private void performRotation(EColor rotationFace, boolean clockwise, int numberOfRotations) {
 		for (int i = 0; i < numberOfRotations; i++) {
 			rotateFace(rotationFace, clockwise);
 		}
+	}
+
+	/** Scrambles the cube. */
+	public String scramble(int scrambleLength, boolean extended, double doubleMoveProbability) {
+		String moves = "UDFBRL";
+		String extendedMoves = "MES";
+		if (extended) {
+			moves += extendedMoves;
+		}
+
+		String scrambleString = "";
+		Random random = new Random();
+		int i = 0;
+		String lastMove = "";
+		while (i < scrambleLength) {
+			int nextMoveIndex = random.nextInt(moves.length());
+			String nextMove = moves.substring(nextMoveIndex, nextMoveIndex + 1);
+
+			if (nextMove.equals(lastMove)) {
+				continue;
+			}
+
+			lastMove = nextMove;
+
+			if (random.nextDouble() <= 0.5) {
+				nextMove += "'";
+			}
+
+			if (random.nextDouble() <= doubleMoveProbability) {
+				if (nextMove.endsWith("'")) {
+					nextMove = nextMove.substring(0, nextMove.length() - 1);
+				}
+				nextMove += "2";
+			}
+			scrambleString += nextMove + " ";
+
+			i++;
+		}
+
+		interpret(scrambleString);
+
+		return scrambleString;
+	}
+
+	/**
+	 * Gets the edge at the position specified by the original position of the
+	 * given edge.
+	 */
+	public Edge getEdgeAt(Edge edge) {
+		return getEdgeAt(edge.getFirstFace(), edge.getSecondFace());
+	}
+
+	/** Gets the edge at the position specified by the two given colors. */
+	public Edge getEdgeAt(EColor firstColor, EColor secondColor) {
+		// TODO (DP): fix bug
+		System.out.println("Getting edge at " + firstColor + " & " + secondColor);
+		int[][] adjacentIndexesForFirstColor = getAdjacentIndexes(firstColor, secondColor);
+		System.out.println("Adjacent indexes for " + firstColor + ": " + arrayString(adjacentIndexesForFirstColor));
+
+		Face secondFace = faces[secondColor.getValue()];
+		EColor secondEdgeColor = secondFace.getPiece(adjacentIndexesForFirstColor[1][0],
+				adjacentIndexesForFirstColor[1][1]);
+
+		int[][] adjacentIndexesForSecondColor = getAdjacentIndexes(secondColor, firstColor);
+		System.out.println("Adjacent indexes for " + secondColor + ": " + arrayString(adjacentIndexesForSecondColor));
+
+		// TODO (DP): Extract accessor
+		Face firstFace = faces[firstColor.getValue()];
+		EColor firstEdgeColor = firstFace.getPiece(adjacentIndexesForSecondColor[1][0],
+				adjacentIndexesForSecondColor[1][1]);
+
+		Edge edge = new Edge(firstEdgeColor, secondEdgeColor);
+		return edge;
+	}
+
+	private static String arrayString(int[][] array) {
+		String s = "{";
+		for (int[] is : array) {
+			s += "{";
+			for (int i : is) {
+				s += i + ", ";
+			}
+			s += "}, ";
+		}
+		s += "}";
+		return s;
 	}
 
 	@Override
@@ -248,20 +371,28 @@ public class Cube {
 		return cubeString.get() + "------\r\n";
 	}
 
+	/** Used for testing. */
 	public static void main(String[] args) {
 		Cube myCube = new Cube();
 
-		myCube.interpret("X Y Z");
+		// myCube.interpret("X Y Z");
 
-		System.out.println(myCube.topFace);
-		System.out.println(myCube.frontFace);
-		System.out.println(myCube.rightFace);
+		// System.out.println(myCube.topFace);
+		// System.out.println(myCube.frontFace);
+		// System.out.println(myCube.rightFace);
 
-		myCube.interpret("R U R' U' R' F R2 U' R' U' R U R' F'");
+		// myCube.interpret("R U R' U' R' F R2 U' R' U' R U R' F'");
 		// System.out.println(myCube);
 
-		myCube.interpret("R U R' U' R' F R2 U' R' U' R U R' F'");
+		// myCube.interpret("R U R' U' R' F R2 U' R' U' R U R' F'");
 		System.out.println(myCube);
 
+		// String scramble = myCube.scramble(25, false, 0.3d);
+		// System.out.println(scramble);
+
+		System.out.println(myCube);
+
+		Edge edge = myCube.getEdgeAt(EColor.ORANGE, EColor.GREEN);
+		System.out.println(edge);
 	}
 }
