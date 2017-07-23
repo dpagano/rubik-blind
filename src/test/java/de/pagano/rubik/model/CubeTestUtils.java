@@ -2,7 +2,10 @@ package de.pagano.rubik.model;
 
 import org.junit.Assert;
 
+/** Utils for testing cubes and faces. */
 public class CubeTestUtils {
+
+	/** Asserts that the provided faces are equal. */
 	public static void assertFacesAreEqual(Face firstFace, Face secondFace) throws CubeException {
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
@@ -11,6 +14,7 @@ public class CubeTestUtils {
 		}
 	}
 
+	/** Asserts that the provided pieces (i.e. colors) are equal. */
 	public static void assertPiecesAreEqual(EColor firstPiece, EColor secondPiece) {
 		Assert.assertTrue("Pieces are not equal: " + firstPiece + " & " + secondPiece,
 				piecesAreEqual(firstPiece, secondPiece));
@@ -35,6 +39,7 @@ public class CubeTestUtils {
 		}
 	}
 
+	/** Asserts that the provided cubes are equal. */
 	public static void assertCubesAreEqual(Cube firstCube, Cube secondCube) throws CubeException {
 		for (int faceIndex = 0; faceIndex < 6; faceIndex++) {
 			assertFacesAreEqual(firstCube.getFace(EColor.getColor(faceIndex)),

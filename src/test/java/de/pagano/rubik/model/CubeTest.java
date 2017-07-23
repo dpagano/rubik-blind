@@ -1,5 +1,8 @@
 package de.pagano.rubik.model;
 
+import static de.pagano.rubik.model.CubeTestUtils.assertCubesAreEqual;
+import static de.pagano.rubik.model.CubeTestUtils.assertFaceEquals;
+
 import java.util.Arrays;
 
 import org.junit.Before;
@@ -19,16 +22,16 @@ public class CubeTest {
 	@Test
 	public void cubeRotationShouldNotChangeRelativeColors() throws CubeException {
 		cube.rotateFace(EColor.GREEN, true);
-		CubeTestUtils.assertFaceEquals(cube.getFace(EColor.GREEN), getArrayOfSameColor(EColor.GREEN, 9));
+		assertFaceEquals(cube.getFace(EColor.GREEN), getArrayOfSameColor(EColor.GREEN, 9));
 
 		cube.rotateFace(EColor.BLUE, false);
-		CubeTestUtils.assertFaceEquals(cube.getFace(EColor.BLUE), getArrayOfSameColor(EColor.BLUE, 9));
+		assertFaceEquals(cube.getFace(EColor.BLUE), getArrayOfSameColor(EColor.BLUE, 9));
 	}
 
 	@Test
 	public void cubeCopyShouldHaveIdenticalColors() throws CubeException {
 		Cube copy = cube.copy();
-		CubeTestUtils.assertCubesAreEqual(cube, copy);
+		assertCubesAreEqual(cube, copy);
 	}
 
 	@Test
@@ -36,7 +39,7 @@ public class CubeTest {
 		Cube copy = cube.copy();
 		copy.rotateFace(EColor.RED, false);
 		copy.rotateFace(EColor.RED, true);
-		CubeTestUtils.assertCubesAreEqual(cube, copy);
+		assertCubesAreEqual(cube, copy);
 	}
 
 	@Test
@@ -46,20 +49,20 @@ public class CubeTest {
 		copy.rotateFace(EColor.GREEN, false);
 		copy.rotateFace(EColor.GREEN, false);
 		copy.rotateFace(EColor.GREEN, false);
-		CubeTestUtils.assertCubesAreEqual(cube, copy);
+		assertCubesAreEqual(cube, copy);
 	}
 
 	@Test
 	public void rotatingShouldYieldCorrectAdjacentFaces() throws CubeException {
 		cube.rotateFace(EColor.GREEN, false);
-		CubeTestUtils.assertFaceEquals(cube.getFace(EColor.WHITE), EColor.RED, EColor.RED, EColor.RED, EColor.WHITE,
-				EColor.WHITE, EColor.WHITE, EColor.WHITE, EColor.WHITE, EColor.WHITE);
-		CubeTestUtils.assertFaceEquals(cube.getFace(EColor.ORANGE), EColor.ORANGE, EColor.ORANGE, EColor.WHITE,
-				EColor.ORANGE, EColor.ORANGE, EColor.WHITE, EColor.ORANGE, EColor.ORANGE, EColor.WHITE);
-		CubeTestUtils.assertFaceEquals(cube.getFace(EColor.YELLOW), EColor.ORANGE, EColor.ORANGE, EColor.ORANGE,
-				EColor.YELLOW, EColor.YELLOW, EColor.YELLOW, EColor.YELLOW, EColor.YELLOW, EColor.YELLOW);
-		CubeTestUtils.assertFaceEquals(cube.getFace(EColor.RED), EColor.YELLOW, EColor.RED, EColor.RED, EColor.YELLOW,
-				EColor.RED, EColor.RED, EColor.YELLOW, EColor.RED, EColor.RED);
+		assertFaceEquals(cube.getFace(EColor.WHITE), EColor.RED, EColor.RED, EColor.RED, EColor.WHITE, EColor.WHITE,
+				EColor.WHITE, EColor.WHITE, EColor.WHITE, EColor.WHITE);
+		assertFaceEquals(cube.getFace(EColor.ORANGE), EColor.ORANGE, EColor.ORANGE, EColor.WHITE, EColor.ORANGE,
+				EColor.ORANGE, EColor.WHITE, EColor.ORANGE, EColor.ORANGE, EColor.WHITE);
+		assertFaceEquals(cube.getFace(EColor.YELLOW), EColor.ORANGE, EColor.ORANGE, EColor.ORANGE, EColor.YELLOW,
+				EColor.YELLOW, EColor.YELLOW, EColor.YELLOW, EColor.YELLOW, EColor.YELLOW);
+		assertFaceEquals(cube.getFace(EColor.RED), EColor.YELLOW, EColor.RED, EColor.RED, EColor.YELLOW, EColor.RED,
+				EColor.RED, EColor.YELLOW, EColor.RED, EColor.RED);
 	}
 
 	@Test
