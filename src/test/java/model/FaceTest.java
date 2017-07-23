@@ -14,7 +14,7 @@ public class FaceTest {
 	private Face multiColoredFace;
 
 	@Before
-	public void before() {
+	public void before() throws CubeException {
 		face = new Face(EColor.WHITE);
 		multiColoredFace = new Face(EColor.WHITE);
 		multiColoredFace.setPiece(0, 0, EColor.WHITE);
@@ -29,29 +29,29 @@ public class FaceTest {
 	}
 
 	@Test
-	public void faceCopyShouldHaveIdenticalColors() {
+	public void faceCopyShouldHaveIdenticalColors() throws CubeException {
 		assertFacesAreEqual(multiColoredFace, multiColoredFace.copy());
 	}
 
 	@Test
-	public void faceShouldGetAndSetCorrectColor() {
+	public void faceShouldGetAndSetCorrectColor() throws CubeException {
 		face.setPiece(2, 1, EColor.RED);
 		assertPiecesAreEqual(face.getPiece(2, 1), EColor.RED);
 		assertPiecesAreEqual(face.getPiece(0, 0), EColor.WHITE);
 	}
 
 	@Test(expected = CubeException.class)
-	public void faceShouldThrowExceptionForSetPieceOutOfBounds() {
+	public void faceShouldThrowExceptionForSetPieceOutOfBounds() throws CubeException {
 		face.setPiece(3, 3, EColor.GREEN);
 	}
 
 	@Test(expected = CubeException.class)
-	public void faceShouldThrowExceptionForGetPieceOutOfBounds() {
+	public void faceShouldThrowExceptionForGetPieceOutOfBounds() throws CubeException {
 		face.getPiece(3, 3);
 	}
 
 	@Test
-	public void rotateCWShouldRotateTheColorsCorrectly() {
+	public void rotateCWShouldRotateTheColorsCorrectly() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
 		multiColoredFace.rotateClockwise();
 
@@ -67,7 +67,7 @@ public class FaceTest {
 	}
 
 	@Test
-	public void rotateCCWShouldRotateTheColorsCorrectly() {
+	public void rotateCCWShouldRotateTheColorsCorrectly() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
 		multiColoredFace.rotateCounterClockwise();
 
@@ -83,7 +83,7 @@ public class FaceTest {
 	}
 
 	@Test
-	public void rotateCCWFourTimesShouldEqualIdentityTransform() {
+	public void rotateCCWFourTimesShouldEqualIdentityTransform() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
 		multiColoredFace.rotateCounterClockwise();
 		multiColoredFace.rotateCounterClockwise();
@@ -93,7 +93,7 @@ public class FaceTest {
 	}
 
 	@Test
-	public void rotateCWFourTimesShouldEqualIdentityTransform() {
+	public void rotateCWFourTimesShouldEqualIdentityTransform() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
 		multiColoredFace.rotateClockwise();
 		multiColoredFace.rotateClockwise();
@@ -103,14 +103,14 @@ public class FaceTest {
 	}
 
 	@Test
-	public void rotateBackAndForthShouldEqualIdentityTransform() {
+	public void rotateBackAndForthShouldEqualIdentityTransform() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
 		multiColoredFace.rotateCounterClockwise();
 		multiColoredFace.rotateClockwise();
 		assertFacesAreEqual(multiColoredFace, originalFace);
 	}
 
-	private void assertFacesAreEqual(Face firstFace, Face secondFace) {
+	private void assertFacesAreEqual(Face firstFace, Face secondFace) throws CubeException {
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
 				assertPiecesAreEqual(firstFace.getPiece(x, y), secondFace.getPiece(x, y));

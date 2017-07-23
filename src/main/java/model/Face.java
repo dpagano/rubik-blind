@@ -11,14 +11,18 @@ public class Face {
 	 */
 	private EColor faceColor;
 
-	/** Constructor. */
-	public Face(EColor faceColor) {
+	/**
+	 * Constructor.
+	 */
+	public Face(EColor faceColor) throws CubeException {
 		this.faceColor = faceColor;
 		setAllPieces(faceColor);
 	}
 
-	/** Creates a copy of this face which has the same colors. */
-	public Face copy() {
+	/**
+	 * Creates a copy of this face which has the same colors.
+	 */
+	public Face copy() throws CubeException {
 		Face copy = new Face(faceColor);
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
@@ -28,24 +32,30 @@ public class Face {
 		return copy;
 	}
 
-	/** Sets the piece with the specified coordinates to the specified color. */
-	/* package */ void setPiece(int x, int y, EColor color) {
+	/**
+	 * Sets the piece with the specified coordinates to the specified color.
+	 */
+	/* package */ void setPiece(int x, int y, EColor color) throws CubeException {
 		if (x >= 3 || y >= 3) {
 			throw new CubeException("Cube size is 3x3.");
 		}
 		pieces[x][y] = color;
 	}
 
-	/** Gets the color of the piece with the specified coordinates. */
-	/* package */ EColor getPiece(int x, int y) {
+	/**
+	 * Gets the color of the piece with the specified coordinates.
+	 */
+	/* package */ EColor getPiece(int x, int y) throws CubeException {
 		if (x >= 3 || y >= 3) {
 			throw new CubeException("Cube size is 3x3.");
 		}
 		return pieces[x][y];
 	}
 
-	/** Sets all pieces of this face to the specified color. */
-	private void setAllPieces(EColor color) {
+	/**
+	 * Sets all pieces of this face to the specified color.
+	 */
+	private void setAllPieces(EColor color) throws CubeException {
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
 				setPiece(x, y, color);
