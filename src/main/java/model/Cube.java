@@ -26,7 +26,7 @@ public class Cube {
 	private EColor rightFace;
 
 	/** The faces of the cube. */
-	private Face[] faces = new Face[6];
+	private final Face[] faces = new Face[6];
 
 	/** Constructor. */
 	public Cube() throws CubeException {
