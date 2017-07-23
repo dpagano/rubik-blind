@@ -224,59 +224,57 @@ public class Cube {
 
 	/** Interprets the provided move on the cube and performs it. */
 	private void performSingleMove(String move) throws CubeException {
-		boolean clockwise = !move.endsWith("'");
+		boolean clockwise = !move.endsWith(Move.MODIFIER_REVERSE);
 		int numberOfRotations = 1;
-		if (move.endsWith("2")) {
+		if (move.endsWith(Move.MODIFIER_DOUBLE)) {
 			numberOfRotations = 2;
 		}
 		String firstLetter = move.substring(0, 1);
-
-		// TODO (DP): Extract constants.
 		switch (firstLetter) {
-		case "U":
+		case Move.UP:
 			performRotation(topFace, clockwise, numberOfRotations);
 			break;
-		case "D":
+		case Move.DOWN:
 			performRotation(getOppositeFace(topFace), clockwise, numberOfRotations);
 			break;
-		case "F":
+		case Move.FRONT:
 			performRotation(frontFace, clockwise, numberOfRotations);
 			break;
-		case "B":
+		case Move.BACK:
 			performRotation(getOppositeFace(frontFace), clockwise, numberOfRotations);
 			break;
-		case "R":
+		case Move.RIGHT:
 			performRotation(rightFace, clockwise, numberOfRotations);
 			break;
-		case "L":
+		case Move.LEFT:
 			performRotation(getOppositeFace(rightFace), clockwise, numberOfRotations);
 			break;
-		case "M":
+		case Move.MIDDLE:
 			performRotation(rightFace, clockwise, numberOfRotations);
 			performRotation(getOppositeFace(rightFace), !clockwise, numberOfRotations);
 			rotateX(!clockwise, numberOfRotations);
 			break;
-		case "E":
+		case Move.EQUATORIAL:
 			performRotation(topFace, clockwise, numberOfRotations);
 			performRotation(getOppositeFace(topFace), !clockwise, numberOfRotations);
 			rotateY(!clockwise, numberOfRotations);
 			break;
-		case "S":
+		case Move.STANDING:
 			performRotation(frontFace, !clockwise, numberOfRotations);
 			performRotation(getOppositeFace(frontFace), clockwise, numberOfRotations);
 			rotateZ(clockwise, numberOfRotations);
 			break;
-		case "X":
+		case Move.X:
 			rotateX(clockwise, numberOfRotations);
 			break;
-		case "Y":
+		case Move.Y:
 			rotateY(clockwise, numberOfRotations);
 			break;
-		case "Z":
+		case Move.Z:
 			rotateZ(clockwise, numberOfRotations);
 			break;
 		default:
-			throw new IllegalArgumentException("Unknown move: " + move);
+			throw new CubeException("Unknown move: " + move);
 		}
 
 	}

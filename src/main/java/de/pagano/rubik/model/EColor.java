@@ -2,7 +2,7 @@ package de.pagano.rubik.model;
 
 /** The colors of a cube. */
 public enum EColor {
-	WHITE((byte) 0), GREEN((byte) 1), ORANGE((byte) 2), BLUE((byte) 3), RED((byte) 4), YELLOW((byte) 5);
+	WHITE(0), GREEN(1), ORANGE(2), BLUE(3), RED(4), YELLOW(5);
 
 	/** The value of the color. Used to order the colors. */
 	private final int value;
