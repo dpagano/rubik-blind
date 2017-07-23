@@ -1,21 +1,28 @@
 package model;
 
+/** The colors of a cube. */
 public enum EColor {
 	WHITE((byte) 0), GREEN((byte) 1), ORANGE((byte) 2), BLUE((byte) 3), RED((byte) 4), YELLOW((byte) 5);
 
-	private final byte value;
-	private static final EColor[] colors = { WHITE, GREEN, ORANGE, BLUE, RED, YELLOW };
+	/** The value of the color. Used to order the colors. */
+	private final int value;
 
-	private EColor(byte value) {
+	/** The colors. */
+	private static final EColor[] COLORS = { WHITE, GREEN, ORANGE, BLUE, RED, YELLOW };
+
+	/** Constructor. */
+	private EColor(int value) {
 		this.value = value;
 	}
 
-	public byte getValue() {
+	/** @see value. */
+	public int getValue() {
 		return value;
 	}
 
-	public static EColor getColor(byte value) {
-		return colors[value];
+	/** Gets the color for a specific value. */
+	public static EColor getColor(int value) {
+		return COLORS[value];
 	}
 
 	@Override
