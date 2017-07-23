@@ -26,7 +26,7 @@ public class Cube {
 	private EColor rightFace;
 
 	/** The faces of the cube. */
-	private static Face[] faces = new Face[6];
+	private Face[] faces = new Face[6];
 
 	/** Constructor. */
 	public Cube() throws CubeException {
@@ -39,10 +39,25 @@ public class Cube {
 		rightFace = EColor.RED;
 	}
 
+	/**
+	 * Creates a copy of this cube which has the same colors.
+	 */
+	public Cube copy() throws CubeException {
+		Cube copy = new Cube();
+		for (int faceIndex = 0; faceIndex < 6; faceIndex++) {
+			copy.faces[faceIndex] = faces[faceIndex].copy();
+		}
+		return copy;
+	}
+
 	/** Rotates the specified face. */
 	public void rotateFace(EColor face, boolean clockwise) throws CubeException {
 		faces[face.getValue()].rotate(clockwise);
 		rotateAdjacentFaces(face, clockwise);
+	}
+
+	public Face getFace(EColor centerColor) {
+		return faces[centerColor.getValue()];
 	}
 
 	/** Rotates the adjacent pieces on the adjacent faces of the specified face. */
@@ -116,7 +131,7 @@ public class Cube {
 	}
 
 	/** Gets the adjacent colors of the specified face in the specified order. */
-	private List<EColor> getAdjacentColors(EColor face, boolean clockwise) {
+	private static List<EColor> getAdjacentColors(EColor face, boolean clockwise) {
 		List<EColor> colors;
 		switch (face) {
 		case WHITE:
@@ -147,9 +162,7 @@ public class Cube {
 		return colors;
 	}
 
-	/**
-	 * Gets the opposite color of the specified color.
-	 */
+	/** Gets the opposite color of the specified color. */
 	private EColor getOppositeFace(EColor color) throws CubeException {
 		switch (color) {
 		case WHITE:

@@ -1,6 +1,8 @@
 package model;
 
-import org.junit.Assert;
+import static model.CubeTestUtils.assertFacesAreEqual;
+import static model.CubeTestUtils.assertPiecesAreEqual;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -109,22 +111,4 @@ public class FaceTest {
 		multiColoredFace.rotateClockwise();
 		assertFacesAreEqual(multiColoredFace, originalFace);
 	}
-
-	private void assertFacesAreEqual(Face firstFace, Face secondFace) throws CubeException {
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
-				assertPiecesAreEqual(firstFace.getPiece(x, y), secondFace.getPiece(x, y));
-			}
-		}
-	}
-
-	private void assertPiecesAreEqual(EColor firstPiece, EColor secondPiece) {
-		Assert.assertTrue("Pieces are not equal: " + firstPiece + " & " + secondPiece,
-				piecesAreEqual(firstPiece, secondPiece));
-	}
-
-	private boolean piecesAreEqual(EColor firstPiece, EColor secondPiece) {
-		return (firstPiece.equals(secondPiece));
-	}
-
 }

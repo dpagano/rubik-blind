@@ -19,6 +19,11 @@ public class Face {
 		setAllPieces(faceColor);
 	}
 
+	/** Gets the number of pieces of this face. */
+	public int getNumberOfPieces() {
+		return 9;
+	}
+
 	/**
 	 * Creates a copy of this face which has the same colors.
 	 */
