@@ -15,6 +15,7 @@ public class FaceTest {
 	/** Common face used in test cases. Has multi-colored pieces. */
 	private Face multiColoredFace;
 
+	/** Sets up {@link #face} and {@link #multiColoredFace}. */
 	@Before
 	public void before() throws CubeException {
 		face = new Face(EColor.WHITE);
@@ -30,11 +31,13 @@ public class FaceTest {
 		multiColoredFace.setPiece(2, 2, EColor.RED);
 	}
 
+	/** Tests that the copied face has the same colors as the original face. */
 	@Test
 	public void faceCopyShouldHaveIdenticalColors() throws CubeException {
 		assertFacesAreEqual(multiColoredFace, multiColoredFace.copy());
 	}
 
+	/** Tests that setting and getting pieces works correctly. */
 	@Test
 	public void faceShouldGetAndSetCorrectColor() throws CubeException {
 		face.setPiece(2, 1, EColor.RED);
@@ -42,16 +45,19 @@ public class FaceTest {
 		assertPiecesAreEqual(face.getPiece(0, 0), EColor.WHITE);
 	}
 
+	/** Tests that setting a piece out of bounds throws an exception. */
 	@Test(expected = CubeException.class)
 	public void faceShouldThrowExceptionForSetPieceOutOfBounds() throws CubeException {
 		face.setPiece(3, 3, EColor.GREEN);
 	}
 
+	/** Tests that getting a piece out of bounds throws an exception. */
 	@Test(expected = CubeException.class)
 	public void faceShouldThrowExceptionForGetPieceOutOfBounds() throws CubeException {
 		face.getPiece(3, 3);
 	}
 
+	/** Tests that rotating a face clockwise works correctly. */
 	@Test
 	public void rotateCWShouldRotateTheColorsCorrectly() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
@@ -68,6 +74,7 @@ public class FaceTest {
 		assertPiecesAreEqual(originalFace.getPiece(0, 2), multiColoredFace.getPiece(2, 2));
 	}
 
+	/** Tests that rotating a face counter clockwise works correctly. */
 	@Test
 	public void rotateCCWShouldRotateTheColorsCorrectly() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
@@ -84,6 +91,10 @@ public class FaceTest {
 		assertPiecesAreEqual(originalFace.getPiece(2, 2), multiColoredFace.getPiece(0, 2));
 	}
 
+	/**
+	 * Tests that rotating a face counter clockwise four times does not change the
+	 * face.
+	 */
 	@Test
 	public void rotateCCWFourTimesShouldEqualIdentityTransform() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
@@ -94,6 +105,7 @@ public class FaceTest {
 		assertFacesAreEqual(multiColoredFace, originalFace);
 	}
 
+	/** Tests that rotating a face clockwise four times does not change the face. */
 	@Test
 	public void rotateCWFourTimesShouldEqualIdentityTransform() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
@@ -104,6 +116,7 @@ public class FaceTest {
 		assertFacesAreEqual(multiColoredFace, originalFace);
 	}
 
+	/** Tests that rotating a face back and forth does not change the face. */
 	@Test
 	public void rotateBackAndForthShouldEqualIdentityTransform() throws CubeException {
 		Face originalFace = multiColoredFace.copy();
