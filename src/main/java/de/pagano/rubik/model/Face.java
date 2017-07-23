@@ -1,4 +1,4 @@
-package model;
+package de.pagano.rubik.model;
 
 /** A face of a 3x3 cube. */
 public class Face {

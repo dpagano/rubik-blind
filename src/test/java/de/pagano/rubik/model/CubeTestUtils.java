@@ -1,6 +1,11 @@
-package model;
+package de.pagano.rubik.model;
 
 import org.junit.Assert;
+
+import de.pagano.rubik.model.Cube;
+import de.pagano.rubik.model.CubeException;
+import de.pagano.rubik.model.EColor;
+import de.pagano.rubik.model.Face;
 
 public class CubeTestUtils {
 	public static void assertFacesAreEqual(Face firstFace, Face secondFace) throws CubeException {

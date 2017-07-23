@@ -1,4 +1,4 @@
-package model;
+package de.pagano.rubik.model;
 
 /** The colors of a cube. */
 public enum EColor {

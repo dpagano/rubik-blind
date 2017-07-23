@@ -1,4 +1,4 @@
-package model;
+package de.pagano.rubik.model;
 
 /**
  * Exception for problems related to cubes. Currently based on

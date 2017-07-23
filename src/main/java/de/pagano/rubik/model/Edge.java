@@ -1,4 +1,4 @@
-package model;
+package de.pagano.rubik.model;
 
 import java.util.Objects;
 

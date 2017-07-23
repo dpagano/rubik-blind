@@ -1,9 +1,13 @@
-package model;
+package de.pagano.rubik.model;
 
 import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import de.pagano.rubik.model.Cube;
+import de.pagano.rubik.model.CubeException;
+import de.pagano.rubik.model.EColor;
 
 /** Tests for a cube. */
 public class CubeTest {
