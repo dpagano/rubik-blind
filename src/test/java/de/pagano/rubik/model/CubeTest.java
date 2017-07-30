@@ -146,6 +146,7 @@ public class CubeTest {
 				copy.getFace(copy.getTopFace()));
 	}
 
+	/** Tests that performing the T perm PLL yields the expected outcome. */
 	@Test
 	public void performingPLLMoveShouldYieldCorrectResult() throws CubeException {
 		cube.move("R U R' U' R' F R2 U' R' U' R U R' F'");
