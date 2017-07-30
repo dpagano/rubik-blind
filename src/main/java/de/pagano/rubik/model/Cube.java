@@ -249,7 +249,6 @@ public class Cube {
 		int[][] adjacentIndexesForSecondFace = CubeGeometry.getAdjacentIndexes(secondFace, firstFace);
 		System.out.println("Adjacent indexes for " + secondFace + ": " + arrayString(adjacentIndexesForSecondFace));
 
-		// TODO (DP): Extract accessor
 		Face firstFaceOnThisCube = faces[firstFace.getIndex()];
 		EColor firstEdgeColor = firstFaceOnThisCube.getPiece(adjacentIndexesForSecondFace[1][0],
 				adjacentIndexesForSecondFace[1][1]);
@@ -282,21 +281,7 @@ public class Cube {
 	public static void main(String[] args) throws CubeException {
 		Cube myCube = new Cube();
 
-		// myCube.interpret("X Y Z");
-
-		// System.out.println(myCube.topFace);
-		// System.out.println(myCube.frontFace);
-		// System.out.println(myCube.rightFace);
-
 		myCube.move("R U R' U' R' F R2 U' R' U' R U R' F'");
-		System.out.println(myCube);
-
-		// myCube.interpret("R U R' U' R' F R2 U' R' U' R U R' F'");
-		System.out.println(myCube);
-
-		// String scramble = myCube.scramble(25, false, 0.3d);
-		// System.out.println(scramble);
-
 		System.out.println(myCube);
 
 		Edge edge = myCube.getEdgeAt(EFace.LEFT, EFace.FRONT);
