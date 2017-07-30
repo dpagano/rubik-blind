@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import de.pagano.rubik.model.moves.EMove;
+
 /**
  * A cube, which is able to rotate faces, interpret moves, and scramble.
  *

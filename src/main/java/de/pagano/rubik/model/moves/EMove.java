@@ -1,4 +1,4 @@
-package de.pagano.rubik.model;
+package de.pagano.rubik.model.moves;
 
 import java.util.Arrays;
 import java.util.List;
