@@ -185,13 +185,13 @@ public class Cube {
 
 	/** Interprets the provided move on the cube and performs it. */
 	private void performSingleMove(String move) throws CubeException {
-		boolean clockwise = !move.endsWith(Move.MODIFIER_REVERSE.toString());
+		boolean clockwise = !move.endsWith(EMove.MODIFIER_REVERSE.toString());
 		int numberOfRotations = 1;
-		if (move.endsWith(Move.MODIFIER_DOUBLE.toString())) {
+		if (move.endsWith(EMove.MODIFIER_DOUBLE.toString())) {
 			numberOfRotations = 2;
 		}
 		String firstLetter = move.substring(0, 1);
-		Move interpretedMove = Move.fromString(firstLetter);
+		EMove interpretedMove = EMove.fromString(firstLetter);
 		switch (interpretedMove) {
 		case UP:
 			performRotation(topFace, clockwise, numberOfRotations);
