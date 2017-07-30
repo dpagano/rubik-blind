@@ -8,9 +8,9 @@ import java.util.List;
 // as subclasses, such that different cubes can be represented.
 public class CubeOrientation {
 
-	/** Gets the opposite color of the specified color. */
-	public static EFace getOppositeFace(EFace color) throws CubeException {
-		switch (color) {
+	/** Gets the opposite face of the specified face. */
+	public static EFace getOppositeFace(EFace face) throws CubeException {
+		switch (face) {
 		case TOP:
 			return EFace.BOTTOM;
 		case FRONT:
@@ -24,40 +24,40 @@ public class CubeOrientation {
 		case BOTTOM:
 			return EFace.TOP;
 		default:
-			throw new CubeException("Unknown color: " + color);
+			throw new CubeException("Unknown face: " + face);
 		}
 	}
 
 	/** Gets the adjacent colors of the specified face in the specified order. */
-	public static List<EFace> getAdjacentColors(EFace face, boolean clockwise) {
-		List<EFace> colors;
+	public static List<EFace> getAdjacentFaces(EFace face, boolean clockwise) {
+		List<EFace> faces;
 		switch (face) {
 		case TOP:
-			colors = Arrays.asList(EFace.FRONT, EFace.LEFT, EFace.BACK, EFace.RIGHT);
+			faces = Arrays.asList(EFace.FRONT, EFace.LEFT, EFace.BACK, EFace.RIGHT);
 			break;
 		case FRONT:
-			colors = Arrays.asList(EFace.TOP, EFace.RIGHT, EFace.BOTTOM, EFace.LEFT);
+			faces = Arrays.asList(EFace.TOP, EFace.RIGHT, EFace.BOTTOM, EFace.LEFT);
 			break;
 		case LEFT:
-			colors = Arrays.asList(EFace.TOP, EFace.FRONT, EFace.BOTTOM, EFace.BACK);
+			faces = Arrays.asList(EFace.TOP, EFace.FRONT, EFace.BOTTOM, EFace.BACK);
 			break;
 		case BACK:
-			colors = Arrays.asList(EFace.TOP, EFace.LEFT, EFace.BOTTOM, EFace.RIGHT);
+			faces = Arrays.asList(EFace.TOP, EFace.LEFT, EFace.BOTTOM, EFace.RIGHT);
 			break;
 		case RIGHT:
-			colors = Arrays.asList(EFace.TOP, EFace.BACK, EFace.BOTTOM, EFace.FRONT);
+			faces = Arrays.asList(EFace.TOP, EFace.BACK, EFace.BOTTOM, EFace.FRONT);
 			break;
 		case BOTTOM:
-			colors = Arrays.asList(EFace.FRONT, EFace.RIGHT, EFace.BACK, EFace.LEFT);
+			faces = Arrays.asList(EFace.FRONT, EFace.RIGHT, EFace.BACK, EFace.LEFT);
 			break;
 		default:
-			colors = Arrays.asList();
+			faces = Arrays.asList();
 		}
 
 		if (!clockwise) {
-			Collections.reverse(colors);
+			Collections.reverse(faces);
 		}
-		return colors;
+		return faces;
 	}
 
 	/**
