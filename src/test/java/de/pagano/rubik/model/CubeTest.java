@@ -2,7 +2,8 @@ package de.pagano.rubik.model;
 
 import static de.pagano.rubik.model.CubeTestUtils.assertCubesAreEqual;
 import static de.pagano.rubik.model.CubeTestUtils.assertFaceEquals;
-import static de.pagano.rubik.model.CubeTestUtils.assertPiecesAreEqual;
+import static de.pagano.rubik.model.CubeTestUtils.assertFaceEqualsColorsForSchema;
+import static de.pagano.rubik.model.CubeTestUtils.assertFacesAreEqual;
 
 import java.util.Arrays;
 
@@ -18,17 +19,22 @@ public class CubeTest {
 	/** Creates a new cube for all test cases. */
 	@Before
 	public void before() throws CubeException {
+		// Using default color schema
 		cube = new Cube();
 	}
 
-	/** Tests that rotating a face does not change the rotating face. */
+	/**
+	 * Tests that rotating a face does not change the colors of the rotating face.
+	 */
 	@Test
 	public void rotationShouldNotChangeRotatingFace() throws CubeException {
 		cube.rotateFace(EFace.FRONT, true);
-		assertFaceEquals(cube.getFace(EFace.FRONT), getArrayOfSameColor(EFace.FRONT, 9));
+		assertFaceEquals(cube.getFace(EFace.FRONT),
+				getArrayOfSameColorForColorSchema(cube.getColorSchema(), EFace.FRONT, 9));
 
 		cube.rotateFace(EFace.BACK, false);
-		assertFaceEquals(cube.getFace(EFace.BACK), getArrayOfSameColor(EFace.BACK, 9));
+		assertFaceEquals(cube.getFace(EFace.BACK),
+				getArrayOfSameColorForColorSchema(cube.getColorSchema(), EFace.BACK, 9));
 	}
 
 	/** Tests that a copied cube has the same colors as the original cube. */
@@ -63,18 +69,19 @@ public class CubeTest {
 	 */
 	@Test
 	public void rotatingShouldYieldCorrectAdjacentFaces() throws CubeException {
-		// We currently only rotate around the green axis. It would be good to have a
+		// We currently only rotate around the front axis. It would be good to have a
 		// somewhat reusable rotation test and test all six rotations.
 		cube.rotateFace(EFace.FRONT, false);
-		assertFaceEquals(cube.getFace(EFace.TOP), EFace.RIGHT, EFace.RIGHT, EFace.RIGHT, EFace.TOP, EFace.TOP,
-				EFace.TOP, EFace.TOP, EFace.TOP, EFace.TOP);
-		assertFaceEquals(cube.getFace(EFace.LEFT), EFace.LEFT, EFace.LEFT, EFace.TOP, EFace.LEFT,
-				EFace.LEFT, EFace.TOP, EFace.LEFT, EFace.LEFT, EFace.TOP);
-		assertFaceEquals(cube.getFace(EFace.BOTTOM), EFace.LEFT, EFace.LEFT, EFace.LEFT, EFace.BOTTOM,
-				EFace.BOTTOM, EFace.BOTTOM, EFace.BOTTOM, EFace.BOTTOM, EFace.BOTTOM);
-		assertFaceEquals(cube.getFace(EFace.RIGHT), EFace.BOTTOM, EFace.RIGHT, EFace.RIGHT, EFace.BOTTOM, EFace.RIGHT,
-				EFace.RIGHT, EFace.BOTTOM, EFace.RIGHT, EFace.RIGHT);
-		assertFaceEquals(cube.getFace(EFace.BACK), getArrayOfSameColor(EFace.BACK, 9));
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.TOP), cube.getColorSchema(), EFace.RIGHT, EFace.RIGHT,
+				EFace.RIGHT, EFace.TOP, EFace.TOP, EFace.TOP, EFace.TOP, EFace.TOP, EFace.TOP);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.LEFT), cube.getColorSchema(), EFace.LEFT, EFace.LEFT,
+				EFace.TOP, EFace.LEFT, EFace.LEFT, EFace.TOP, EFace.LEFT, EFace.LEFT, EFace.TOP);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.BOTTOM), cube.getColorSchema(), EFace.LEFT, EFace.LEFT,
+				EFace.LEFT, EFace.BOTTOM, EFace.BOTTOM, EFace.BOTTOM, EFace.BOTTOM, EFace.BOTTOM, EFace.BOTTOM);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.RIGHT), cube.getColorSchema(), EFace.BOTTOM, EFace.RIGHT,
+				EFace.RIGHT, EFace.BOTTOM, EFace.RIGHT, EFace.RIGHT, EFace.BOTTOM, EFace.RIGHT, EFace.RIGHT);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.BACK), cube.getColorSchema(),
+				getArrayOfSameFaces(EFace.BACK, 9));
 	}
 
 	/**
@@ -102,9 +109,10 @@ public class CubeTest {
 	public void rotatingCubeXShouldChangeOrientationCorrectly() throws CubeException {
 		Cube copy = cube.copy();
 		copy.rotateX(true, 1);
-		assertPiecesAreEqual(cube.getRightFace(), copy.getRightFace());
-		assertPiecesAreEqual(cube.getFrontFace(), copy.getTopFace());
-		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getTopFace()), copy.getFrontFace());
+		assertFacesAreEqual(cube.getFace(cube.getRightFace()), copy.getFace(copy.getRightFace()));
+		assertFacesAreEqual(cube.getFace(cube.getFrontFace()), copy.getFace(copy.getTopFace()));
+		assertFacesAreEqual(cube.getFace(CubeOrientation.getOppositeFace(cube.getTopFace())),
+				copy.getFace(copy.getFrontFace()));
 	}
 
 	/**
@@ -115,9 +123,10 @@ public class CubeTest {
 	public void rotatingCubeYShouldChangeOrientationCorrectly() throws CubeException {
 		Cube copy = cube.copy();
 		copy.rotateY(true, 1);
-		assertPiecesAreEqual(cube.getTopFace(), copy.getTopFace());
-		assertPiecesAreEqual(cube.getRightFace(), copy.getFrontFace());
-		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getFrontFace()), copy.getRightFace());
+		assertFacesAreEqual(cube.getFace(cube.getTopFace()), copy.getFace(copy.getTopFace()));
+		assertFacesAreEqual(cube.getFace(cube.getRightFace()), copy.getFace(copy.getFrontFace()));
+		assertFacesAreEqual(cube.getFace(CubeOrientation.getOppositeFace(cube.getFrontFace())),
+				copy.getFace(copy.getRightFace()));
 	}
 
 	/**
@@ -128,30 +137,46 @@ public class CubeTest {
 	public void rotatingCubeZShouldChangeOrientationCorrectly() throws CubeException {
 		Cube copy = cube.copy();
 		copy.rotateZ(true, 1);
-		assertPiecesAreEqual(cube.getFrontFace(), copy.getFrontFace());
-		assertPiecesAreEqual(cube.getTopFace(), copy.getRightFace());
-		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getRightFace()), copy.getTopFace());
+		assertFacesAreEqual(cube.getFace(cube.getFrontFace()), copy.getFace(copy.getFrontFace()));
+		assertFacesAreEqual(cube.getFace(cube.getTopFace()), copy.getFace(copy.getRightFace()));
+		assertFacesAreEqual(cube.getFace(CubeOrientation.getOppositeFace(cube.getRightFace())),
+				copy.getFace(copy.getTopFace()));
 	}
 
 	@Test
 	public void performingPLLMoveShouldYieldCorrectResult() throws CubeException {
 		cube.move("R U R' U' R' F R2 U' R' U' R U R' F'");
-		assertFaceEquals(cube.getFace(EFace.TOP), getArrayOfSameColor(EFace.TOP, 9));
-		assertFaceEquals(cube.getFace(EFace.FRONT), EFace.FRONT, EFace.FRONT, EFace.RIGHT, EFace.FRONT, EFace.FRONT,
-				EFace.FRONT, EFace.FRONT, EFace.FRONT, EFace.FRONT);
-		assertFaceEquals(cube.getFace(EFace.LEFT), EFace.LEFT, EFace.RIGHT, EFace.LEFT, EFace.LEFT,
-				EFace.LEFT, EFace.LEFT, EFace.LEFT, EFace.LEFT, EFace.LEFT);
-		assertFaceEquals(cube.getFace(EFace.BACK), EFace.RIGHT, EFace.BACK, EFace.BACK, EFace.BACK, EFace.BACK,
-				EFace.BACK, EFace.BACK, EFace.BACK, EFace.BACK);
-		assertFaceEquals(cube.getFace(EFace.RIGHT), EFace.BACK, EFace.LEFT, EFace.FRONT, EFace.RIGHT, EFace.RIGHT,
-				EFace.RIGHT, EFace.RIGHT, EFace.RIGHT, EFace.RIGHT);
-		assertFaceEquals(cube.getFace(EFace.BOTTOM), getArrayOfSameColor(EFace.BOTTOM, 9));
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.TOP), cube.getColorSchema(),
+				getArrayOfSameFaces(EFace.TOP, 9));
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.FRONT), cube.getColorSchema(), EFace.FRONT, EFace.FRONT,
+				EFace.RIGHT, EFace.FRONT, EFace.FRONT, EFace.FRONT, EFace.FRONT, EFace.FRONT, EFace.FRONT);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.LEFT), cube.getColorSchema(), EFace.LEFT, EFace.RIGHT,
+				EFace.LEFT, EFace.LEFT, EFace.LEFT, EFace.LEFT, EFace.LEFT, EFace.LEFT, EFace.LEFT);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.BACK), cube.getColorSchema(), EFace.RIGHT, EFace.BACK,
+				EFace.BACK, EFace.BACK, EFace.BACK, EFace.BACK, EFace.BACK, EFace.BACK, EFace.BACK);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.RIGHT), cube.getColorSchema(), EFace.BACK, EFace.LEFT,
+				EFace.FRONT, EFace.RIGHT, EFace.RIGHT, EFace.RIGHT, EFace.RIGHT, EFace.RIGHT, EFace.RIGHT);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.BOTTOM), cube.getColorSchema(),
+				getArrayOfSameFaces(EFace.BOTTOM, 9));
 	}
 
-	/** Gets an {@link EFace} array of the specified color and size. */
-	private EFace[] getArrayOfSameColor(EFace color, int size) {
-		EFace[] colors = new EFace[size];
+	/** Gets an {@link EColor} array of the specified color and size. */
+	private EColor[] getArrayOfSameColorForColorSchema(ICubeColorSchema colorSchema, EFace face, int size) {
+		return getArrayOfSameColor(colorSchema.getColor(face), size);
+	}
+
+	/** Gets an {@link EColor} array of the specified color and size. */
+	private EColor[] getArrayOfSameColor(EColor color, int size) {
+		EColor[] colors = new EColor[size];
 		Arrays.fill(colors, color);
 		return colors;
 	}
+
+	/** Gets an {@link EFace} array of the specified face and size. */
+	private EFace[] getArrayOfSameFaces(EFace face, int size) {
+		EFace[] faces = new EFace[size];
+		Arrays.fill(faces, face);
+		return faces;
+	}
+
 }

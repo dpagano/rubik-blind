@@ -27,10 +27,19 @@ public class Cube {
 	/** The faces of the cube. */
 	private final Face[] faces = new Face[6];
 
+	/** The color schema of this cube */
+	private final ICubeColorSchema colorSchema;
+
 	/** Constructor. */
 	public Cube() throws CubeException {
+		this(new DefaultCubeColorSchema());
+	}
+
+	/** Constructor. */
+	public Cube(ICubeColorSchema colorSchema) throws CubeException {
+		this.colorSchema = colorSchema;
 		for (int i = 0; i < 6; i++) {
-			faces[i] = new Face(EFace.getFace(i));
+			faces[i] = new Face(this.colorSchema.getColor(EFace.getFace(i)));
 		}
 
 		topFace = EFace.TOP;
@@ -42,7 +51,7 @@ public class Cube {
 	 * Creates an identical copy of this cube.
 	 */
 	public Cube copy() throws CubeException {
-		Cube copy = new Cube();
+		Cube copy = new Cube(this.colorSchema);
 		for (int faceIndex = 0; faceIndex < 6; faceIndex++) {
 			copy.faces[faceIndex] = faces[faceIndex].copy();
 		}
@@ -71,6 +80,10 @@ public class Cube {
 		return rightFace;
 	}
 
+	public ICubeColorSchema getColorSchema() {
+		return colorSchema;
+	}
+
 	/** Rotates the adjacent pieces on the adjacent faces of the specified face. */
 	private void rotateAdjacentFaces(EFace face, boolean clockwise) throws CubeException {
 		List<EFace> adjacentFaces = new ArrayList<>(CubeOrientation.getAdjacentFaces(face, !clockwise));
@@ -97,7 +110,7 @@ public class Cube {
 				if (faceIndex == 3) {
 					nextFaceOfThisCube = buffer;
 				}
-				EFace nextColor = nextFaceOfThisCube.getPiece(nextIndexes[i][0], nextIndexes[i][1]);
+				EColor nextColor = nextFaceOfThisCube.getPiece(nextIndexes[i][0], nextIndexes[i][1]);
 				faces[currentFace.getIndex()].setPiece(currentIndexes[i][0], currentIndexes[i][1], nextColor);
 			}
 		}
@@ -255,11 +268,11 @@ public class Cube {
 	}
 
 	/**
-	 * Gets the edge at the position specified by the original position of the given
-	 * edge.
+	 * Takes the colors of the given edge and translates them into faces on this
+	 * cube. Gets the edge sitting at this position.
 	 */
 	public Edge getEdgeAt(Edge edge) throws CubeException {
-		return getEdgeAt(edge.getFirstFace(), edge.getSecondFace());
+		return getEdgeAt(colorSchema.getFace(edge.getFirstColor()), colorSchema.getFace(edge.getSecondColor()));
 	}
 
 	/** Gets the edge at the position specified by the two given faces. */
@@ -269,7 +282,7 @@ public class Cube {
 		System.out.println("Adjacent indexes for " + firstFace + ": " + arrayString(adjacentIndexesForFirstFace));
 
 		Face secondFaceOnThisCube = faces[secondFace.getIndex()];
-		EFace secondEdgeFace = secondFaceOnThisCube.getPiece(adjacentIndexesForFirstFace[1][0],
+		EColor secondEdgeColor = secondFaceOnThisCube.getPiece(adjacentIndexesForFirstFace[1][0],
 				adjacentIndexesForFirstFace[1][1]);
 
 		int[][] adjacentIndexesForSecondFace = CubeOrientation.getAdjacentIndexes(secondFace, firstFace);
@@ -277,10 +290,10 @@ public class Cube {
 
 		// TODO (DP): Extract accessor
 		Face firstFaceOnThisCube = faces[firstFace.getIndex()];
-		EFace firstEdgeFace = firstFaceOnThisCube.getPiece(adjacentIndexesForSecondFace[1][0],
+		EColor firstEdgeColor = firstFaceOnThisCube.getPiece(adjacentIndexesForSecondFace[1][0],
 				adjacentIndexesForSecondFace[1][1]);
 
-		Edge edge = new Edge(firstEdgeFace, secondEdgeFace);
+		Edge edge = new Edge(firstEdgeColor, secondEdgeColor);
 		return edge;
 	}
 

@@ -1,48 +1,22 @@
 package de.pagano.rubik.model;
 
-import java.util.Objects;
+/** An edge is a combination of two colors. */
+public class Edge extends AbstractEdge<EColor> {
 
-public class Edge {
-
-	private EFace[] faces;
-
-	public Edge(EFace firstFace, EFace secondFace) {
-		faces = new EFace[] { firstFace, secondFace };
-	}
-
-	public EFace getFirstFace() {
-		return faces[0];
-	}
-
-	public EFace getSecondFace() {
-		return faces[1];
-	}
-
-	public Edge getInvertedEdge() {
-		return new Edge(faces[1], faces[0]);
+	public Edge(EColor firstValue, EColor secondValue) {
+		super(firstValue, secondValue);
 	}
 
 	@Override
-	public String toString() {
-		return "Edge: " + faces[0] + " & " + faces[1];
+	public AbstractEdge<EColor> getInvertedEdge() {
+		return new Edge(getSecondValue(), getFirstValue());
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-
-		if (obj instanceof Edge) {
-			Edge other = (Edge) obj;
-			return faces[0].equals(other.faces[0]) && faces[1].equals(other.faces[1]);
-		}
-
-		return false;
+	public EColor getFirstColor() {
+		return getFirstValue();
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(faces[0], faces[1]);
+	public EColor getSecondColor() {
+		return getSecondValue();
 	}
 }
