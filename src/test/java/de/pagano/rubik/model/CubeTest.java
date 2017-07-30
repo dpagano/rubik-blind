@@ -114,7 +114,7 @@ public class CubeTest {
 		copy.rotateX(true, 1);
 		assertFacesAreEqual(cube.getFace(cube.getRightFace()), copy.getFace(copy.getRightFace()));
 		assertFacesAreEqual(cube.getFace(cube.getFrontFace()), copy.getFace(copy.getTopFace()));
-		assertFacesAreEqual(cube.getFace(CubeOrientation.getOppositeFace(cube.getTopFace())),
+		assertFacesAreEqual(cube.getFace(CubeGeometry.getOppositeFace(cube.getTopFace())),
 				copy.getFace(copy.getFrontFace()));
 	}
 
@@ -128,7 +128,7 @@ public class CubeTest {
 		copy.rotateY(true, 1);
 		assertFacesAreEqual(cube.getFace(cube.getTopFace()), copy.getFace(copy.getTopFace()));
 		assertFacesAreEqual(cube.getFace(cube.getRightFace()), copy.getFace(copy.getFrontFace()));
-		assertFacesAreEqual(cube.getFace(CubeOrientation.getOppositeFace(cube.getFrontFace())),
+		assertFacesAreEqual(cube.getFace(CubeGeometry.getOppositeFace(cube.getFrontFace())),
 				copy.getFace(copy.getRightFace()));
 	}
 
@@ -142,7 +142,7 @@ public class CubeTest {
 		copy.rotateZ(true, 1);
 		assertFacesAreEqual(cube.getFace(cube.getFrontFace()), copy.getFace(copy.getFrontFace()));
 		assertFacesAreEqual(cube.getFace(cube.getTopFace()), copy.getFace(copy.getRightFace()));
-		assertFacesAreEqual(cube.getFace(CubeOrientation.getOppositeFace(cube.getRightFace())),
+		assertFacesAreEqual(cube.getFace(CubeGeometry.getOppositeFace(cube.getRightFace())),
 				copy.getFace(copy.getTopFace()));
 	}
 

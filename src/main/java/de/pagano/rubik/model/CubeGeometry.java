@@ -4,9 +4,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-// TODO (DP): We could extract an abstract class and have different orientations
-// as subclasses, such that different cubes can be represented.
-public class CubeOrientation {
+/** Describes the geometry of a cube. */
+public class CubeGeometry {
 
 	/** Gets the opposite face of the specified face. */
 	public static EFace getOppositeFace(EFace face) throws CubeException {

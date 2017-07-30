@@ -90,10 +90,10 @@ public class Cube {
 
 	/** Rotates the adjacent pieces on the adjacent faces of the specified face. */
 	private void rotateAdjacentFaces(EFace face, boolean clockwise) throws CubeException {
-		List<EFace> adjacentFaces = new ArrayList<>(CubeOrientation.getAdjacentFaces(face, !clockwise));
+		List<EFace> adjacentFaces = new ArrayList<>(CubeGeometry.getAdjacentFaces(face, !clockwise));
 
 		List<int[][]> indexesToRotate = adjacentFaces.stream().map(adjacentFace -> {
-			return CubeOrientation.getAdjacentIndexes(face, adjacentFace);
+			return CubeGeometry.getAdjacentIndexes(face, adjacentFace);
 		}).collect(Collectors.toList());
 
 		// Add the buffer to the end, so that we can use one simple for loop to
@@ -123,7 +123,7 @@ public class Cube {
 	// TODO (DP): Extract one method with "rotationFace" and other two params
 	/** Rotates the cube along the X axis. */
 	public void rotateX(boolean clockwise, int numberOfRotations) {
-		List<EFace> adjacentFacesClockwise = CubeOrientation.getAdjacentFaces(rightFace, clockwise);
+		List<EFace> adjacentFacesClockwise = CubeGeometry.getAdjacentFaces(rightFace, clockwise);
 		int currentTopFace = adjacentFacesClockwise.indexOf(topFace);
 		topFace = adjacentFacesClockwise.get((currentTopFace + 4 - numberOfRotations) % 4);
 		int currentFrontFace = adjacentFacesClockwise.indexOf(frontFace);
@@ -132,7 +132,7 @@ public class Cube {
 
 	/** Rotates the cube along the Y axis. */
 	public void rotateY(boolean clockwise, int numberOfRotations) {
-		List<EFace> adjacentFacesClockwise = CubeOrientation.getAdjacentFaces(topFace, clockwise);
+		List<EFace> adjacentFacesClockwise = CubeGeometry.getAdjacentFaces(topFace, clockwise);
 		int currentRightFace = adjacentFacesClockwise.indexOf(rightFace);
 		rightFace = adjacentFacesClockwise.get((currentRightFace + 4 - numberOfRotations) % 4);
 		int currentFrontFace = adjacentFacesClockwise.indexOf(frontFace);
@@ -141,7 +141,7 @@ public class Cube {
 
 	/** Rotates the cube along the Z axis. */
 	public void rotateZ(boolean clockwise, int numberOfRotations) {
-		List<EFace> adjacentFacesClockwise = CubeOrientation.getAdjacentFaces(frontFace, clockwise);
+		List<EFace> adjacentFacesClockwise = CubeGeometry.getAdjacentFaces(frontFace, clockwise);
 		int currentRightFace = adjacentFacesClockwise.indexOf(rightFace);
 		rightFace = adjacentFacesClockwise.get((currentRightFace + 4 - numberOfRotations) % 4);
 		int currentTopFace = adjacentFacesClockwise.indexOf(topFace);
@@ -174,33 +174,33 @@ public class Cube {
 			performRotation(topFace, clockwise, numberOfRotations);
 			break;
 		case DOWN:
-			performRotation(CubeOrientation.getOppositeFace(topFace), clockwise, numberOfRotations);
+			performRotation(CubeGeometry.getOppositeFace(topFace), clockwise, numberOfRotations);
 			break;
 		case FRONT:
 			performRotation(frontFace, clockwise, numberOfRotations);
 			break;
 		case BACK:
-			performRotation(CubeOrientation.getOppositeFace(frontFace), clockwise, numberOfRotations);
+			performRotation(CubeGeometry.getOppositeFace(frontFace), clockwise, numberOfRotations);
 			break;
 		case RIGHT:
 			performRotation(rightFace, clockwise, numberOfRotations);
 			break;
 		case LEFT:
-			performRotation(CubeOrientation.getOppositeFace(rightFace), clockwise, numberOfRotations);
+			performRotation(CubeGeometry.getOppositeFace(rightFace), clockwise, numberOfRotations);
 			break;
 		case MIDDLE:
 			performRotation(rightFace, clockwise, numberOfRotations);
-			performRotation(CubeOrientation.getOppositeFace(rightFace), !clockwise, numberOfRotations);
+			performRotation(CubeGeometry.getOppositeFace(rightFace), !clockwise, numberOfRotations);
 			rotateX(!clockwise, numberOfRotations);
 			break;
 		case EQUATORIAL:
 			performRotation(topFace, clockwise, numberOfRotations);
-			performRotation(CubeOrientation.getOppositeFace(topFace), !clockwise, numberOfRotations);
+			performRotation(CubeGeometry.getOppositeFace(topFace), !clockwise, numberOfRotations);
 			rotateY(!clockwise, numberOfRotations);
 			break;
 		case STANDING:
 			performRotation(frontFace, !clockwise, numberOfRotations);
-			performRotation(CubeOrientation.getOppositeFace(frontFace), clockwise, numberOfRotations);
+			performRotation(CubeGeometry.getOppositeFace(frontFace), clockwise, numberOfRotations);
 			rotateZ(clockwise, numberOfRotations);
 			break;
 		case X:
@@ -239,14 +239,14 @@ public class Cube {
 	/** Gets the edge at the position specified by the two given faces. */
 	public Edge getEdgeAt(EFace firstFace, EFace secondFace) throws CubeException {
 		System.out.println("Getting edge at " + firstFace + " & " + secondFace);
-		int[][] adjacentIndexesForFirstFace = CubeOrientation.getAdjacentIndexes(firstFace, secondFace);
+		int[][] adjacentIndexesForFirstFace = CubeGeometry.getAdjacentIndexes(firstFace, secondFace);
 		System.out.println("Adjacent indexes for " + firstFace + ": " + arrayString(adjacentIndexesForFirstFace));
 
 		Face secondFaceOnThisCube = faces[secondFace.getIndex()];
 		EColor secondEdgeColor = secondFaceOnThisCube.getPiece(adjacentIndexesForFirstFace[1][0],
 				adjacentIndexesForFirstFace[1][1]);
 
-		int[][] adjacentIndexesForSecondFace = CubeOrientation.getAdjacentIndexes(secondFace, firstFace);
+		int[][] adjacentIndexesForSecondFace = CubeGeometry.getAdjacentIndexes(secondFace, firstFace);
 		System.out.println("Adjacent indexes for " + secondFace + ": " + arrayString(adjacentIndexesForSecondFace));
 
 		// TODO (DP): Extract accessor
