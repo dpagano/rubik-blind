@@ -2,6 +2,7 @@ package de.pagano.rubik.model;
 
 import static de.pagano.rubik.model.CubeTestUtils.assertCubesAreEqual;
 import static de.pagano.rubik.model.CubeTestUtils.assertFaceEquals;
+import static de.pagano.rubik.model.CubeTestUtils.assertPiecesAreEqual;
 
 import java.util.Arrays;
 
@@ -62,6 +63,8 @@ public class CubeTest {
 	 */
 	@Test
 	public void rotatingShouldYieldCorrectAdjacentFaces() throws CubeException {
+		// We currently only rotate around the green axis. It would be good to have a
+		// somewhat reusable rotation test and test all six rotations.
 		cube.rotateFace(EColor.GREEN, false);
 		assertFaceEquals(cube.getFace(EColor.WHITE), EColor.RED, EColor.RED, EColor.RED, EColor.WHITE, EColor.WHITE,
 				EColor.WHITE, EColor.WHITE, EColor.WHITE, EColor.WHITE);
@@ -75,12 +78,59 @@ public class CubeTest {
 	}
 
 	/**
-	 * Tests that rotating the cube as a whole yields the correct orientation of all
-	 * faces.
+	 * Tests that rotating the cube as a whole retains the correct orientation of
+	 * all faces.
 	 */
 	@Test
-	public void rotatingCubeShouldYieldCorrectFaceOrientation() throws CubeException {
-		// TODO (DP): Rotate cube; get top face etc. => Get face by orientation
+	public void rotatingCubeShouldRetainFaceOrientation() throws CubeException {
+		Cube copy = cube.copy();
+		copy.rotateX(true, 1);
+		assertCubesAreEqual(cube, copy);
+
+		copy.rotateY(false, 1);
+		assertCubesAreEqual(cube, copy);
+
+		copy.rotateZ(true, 1);
+		assertCubesAreEqual(cube, copy);
+	}
+
+	/**
+	 * Tests that rotating the cube as a whole around the X axis yields the correct
+	 * orientation.
+	 */
+	@Test
+	public void rotatingCubeXShouldChangeOrientationCorrectly() throws CubeException {
+		Cube copy = cube.copy();
+		copy.rotateX(true, 1);
+		assertPiecesAreEqual(cube.getRightColor(), copy.getRightColor());
+		assertPiecesAreEqual(cube.getFrontColor(), copy.getTopColor());
+		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getTopColor()), copy.getFrontColor());
+	}
+
+	/**
+	 * Tests that rotating the cube as a whole around the Y axis yields the correct
+	 * orientation.
+	 */
+	@Test
+	public void rotatingCubeYShouldChangeOrientationCorrectly() throws CubeException {
+		Cube copy = cube.copy();
+		copy.rotateY(true, 1);
+		assertPiecesAreEqual(cube.getTopColor(), copy.getTopColor());
+		assertPiecesAreEqual(cube.getRightColor(), copy.getFrontColor());
+		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getFrontColor()), copy.getRightColor());
+	}
+
+	/**
+	 * Tests that rotating the cube as a whole around the Y axis yields the correct
+	 * orientation.
+	 */
+	@Test
+	public void rotatingCubeZShouldChangeOrientationCorrectly() throws CubeException {
+		Cube copy = cube.copy();
+		copy.rotateZ(true, 1);
+		assertPiecesAreEqual(cube.getFrontColor(), copy.getFrontColor());
+		assertPiecesAreEqual(cube.getTopColor(), copy.getRightColor());
+		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getRightColor()), copy.getTopColor());
 	}
 
 	/** Gets an {@link EColor} array of the specified color and size. */

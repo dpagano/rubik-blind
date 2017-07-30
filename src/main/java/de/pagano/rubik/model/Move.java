@@ -1,6 +1,8 @@
 package de.pagano.rubik.model;
 
 public class Move {
+	// TODO (DP): Change that into an enumeration, and provide a helper method to
+	// convert from and to string
 	public static final String UP = "U";
 	public static final String DOWN = "D";
 	public static final String FRONT = "F";

@@ -2,7 +2,6 @@ package de.pagano.rubik.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -60,9 +59,21 @@ public class Cube {
 		return faces[centerColor.getValue()];
 	}
 
+	public EColor getTopColor() {
+		return topFace;
+	}
+
+	public EColor getFrontColor() {
+		return frontFace;
+	}
+
+	public EColor getRightColor() {
+		return rightFace;
+	}
+
 	/** Rotates the adjacent pieces on the adjacent faces of the specified face. */
 	private void rotateAdjacentFaces(EColor face, boolean clockwise) throws CubeException {
-		List<EColor> adjacentFaces = new ArrayList<>(getAdjacentColors(face, !clockwise));
+		List<EColor> adjacentFaces = new ArrayList<>(CubeOrientation.getAdjacentColors(face, !clockwise));
 
 		List<int[][]> indexesToRotate = adjacentFaces.stream().map(adjacentFace -> {
 			return getAdjacentIndexes(face, adjacentFace);
@@ -96,6 +107,8 @@ public class Cube {
 	 * Gets the indexes of the pieces on the adjacent face. Returns an empty array
 	 * for colors that are not adjacent.
 	 */
+	// TODO (DP): This method should work with orientations, not colors. It should
+	// be possible to have a differently colored cube and still work with it.
 	private int[][] getAdjacentIndexes(EColor face, EColor adjacentFace) {
 		if (face == EColor.WHITE || face == EColor.GREEN && adjacentFace == EColor.WHITE
 				|| face == EColor.GREEN && adjacentFace == EColor.YELLOW) {
@@ -130,62 +143,10 @@ public class Cube {
 		return new int[][] {};
 	}
 
-	/** Gets the adjacent colors of the specified face in the specified order. */
-	private static List<EColor> getAdjacentColors(EColor face, boolean clockwise) {
-		List<EColor> colors;
-		switch (face) {
-		case WHITE:
-			colors = Arrays.asList(EColor.GREEN, EColor.ORANGE, EColor.BLUE, EColor.RED);
-			break;
-		case GREEN:
-			colors = Arrays.asList(EColor.WHITE, EColor.RED, EColor.YELLOW, EColor.ORANGE);
-			break;
-		case ORANGE:
-			colors = Arrays.asList(EColor.WHITE, EColor.GREEN, EColor.YELLOW, EColor.BLUE);
-			break;
-		case BLUE:
-			colors = Arrays.asList(EColor.WHITE, EColor.ORANGE, EColor.YELLOW, EColor.RED);
-			break;
-		case RED:
-			colors = Arrays.asList(EColor.WHITE, EColor.BLUE, EColor.YELLOW, EColor.GREEN);
-			break;
-		case YELLOW:
-			colors = Arrays.asList(EColor.GREEN, EColor.RED, EColor.BLUE, EColor.ORANGE);
-			break;
-		default:
-			colors = Arrays.asList();
-		}
-
-		if (!clockwise) {
-			Collections.reverse(colors);
-		}
-		return colors;
-	}
-
-	/** Gets the opposite color of the specified color. */
-	private EColor getOppositeFace(EColor color) throws CubeException {
-		switch (color) {
-		case WHITE:
-			return EColor.YELLOW;
-		case GREEN:
-			return EColor.BLUE;
-		case ORANGE:
-			return EColor.RED;
-		case BLUE:
-			return EColor.GREEN;
-		case RED:
-			return EColor.ORANGE;
-		case YELLOW:
-			return EColor.WHITE;
-		default:
-			throw new CubeException("Unknown color: " + color);
-		}
-	}
-
 	// TODO (DP): Extract one method with "rotationFace" and other two params
 	/** Rotates the cube along the X axis. */
 	public void rotateX(boolean clockwise, int numberOfRotations) {
-		List<EColor> adjacentColorsClockwise = getAdjacentColors(rightFace, clockwise);
+		List<EColor> adjacentColorsClockwise = CubeOrientation.getAdjacentColors(rightFace, clockwise);
 		int currentTopFace = adjacentColorsClockwise.indexOf(topFace);
 		topFace = adjacentColorsClockwise.get((currentTopFace + 4 - numberOfRotations) % 4);
 		int currentFrontFace = adjacentColorsClockwise.indexOf(frontFace);
@@ -194,7 +155,7 @@ public class Cube {
 
 	/** Rotates the cube along the Y axis. */
 	public void rotateY(boolean clockwise, int numberOfRotations) {
-		List<EColor> adjacentColorsClockwise = getAdjacentColors(topFace, clockwise);
+		List<EColor> adjacentColorsClockwise = CubeOrientation.getAdjacentColors(topFace, clockwise);
 		int currentRightFace = adjacentColorsClockwise.indexOf(rightFace);
 		rightFace = adjacentColorsClockwise.get((currentRightFace + 4 - numberOfRotations) % 4);
 		int currentFrontFace = adjacentColorsClockwise.indexOf(frontFace);
@@ -203,7 +164,7 @@ public class Cube {
 
 	/** Rotates the cube along the Z axis. */
 	public void rotateZ(boolean clockwise, int numberOfRotations) {
-		List<EColor> adjacentColorsClockwise = getAdjacentColors(frontFace, clockwise);
+		List<EColor> adjacentColorsClockwise = CubeOrientation.getAdjacentColors(frontFace, clockwise);
 		int currentRightFace = adjacentColorsClockwise.indexOf(rightFace);
 		rightFace = adjacentColorsClockwise.get((currentRightFace + 4 - numberOfRotations) % 4);
 		int currentTopFace = adjacentColorsClockwise.indexOf(topFace);
@@ -235,33 +196,33 @@ public class Cube {
 			performRotation(topFace, clockwise, numberOfRotations);
 			break;
 		case Move.DOWN:
-			performRotation(getOppositeFace(topFace), clockwise, numberOfRotations);
+			performRotation(CubeOrientation.getOppositeFace(topFace), clockwise, numberOfRotations);
 			break;
 		case Move.FRONT:
 			performRotation(frontFace, clockwise, numberOfRotations);
 			break;
 		case Move.BACK:
-			performRotation(getOppositeFace(frontFace), clockwise, numberOfRotations);
+			performRotation(CubeOrientation.getOppositeFace(frontFace), clockwise, numberOfRotations);
 			break;
 		case Move.RIGHT:
 			performRotation(rightFace, clockwise, numberOfRotations);
 			break;
 		case Move.LEFT:
-			performRotation(getOppositeFace(rightFace), clockwise, numberOfRotations);
+			performRotation(CubeOrientation.getOppositeFace(rightFace), clockwise, numberOfRotations);
 			break;
 		case Move.MIDDLE:
 			performRotation(rightFace, clockwise, numberOfRotations);
-			performRotation(getOppositeFace(rightFace), !clockwise, numberOfRotations);
+			performRotation(CubeOrientation.getOppositeFace(rightFace), !clockwise, numberOfRotations);
 			rotateX(!clockwise, numberOfRotations);
 			break;
 		case Move.EQUATORIAL:
 			performRotation(topFace, clockwise, numberOfRotations);
-			performRotation(getOppositeFace(topFace), !clockwise, numberOfRotations);
+			performRotation(CubeOrientation.getOppositeFace(topFace), !clockwise, numberOfRotations);
 			rotateY(!clockwise, numberOfRotations);
 			break;
 		case Move.STANDING:
 			performRotation(frontFace, !clockwise, numberOfRotations);
-			performRotation(getOppositeFace(frontFace), clockwise, numberOfRotations);
+			performRotation(CubeOrientation.getOppositeFace(frontFace), clockwise, numberOfRotations);
 			rotateZ(clockwise, numberOfRotations);
 			break;
 		case Move.X:
