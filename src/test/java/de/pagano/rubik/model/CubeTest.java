@@ -102,9 +102,9 @@ public class CubeTest {
 	public void rotatingCubeXShouldChangeOrientationCorrectly() throws CubeException {
 		Cube copy = cube.copy();
 		copy.rotateX(true, 1);
-		assertPiecesAreEqual(cube.getRightColor(), copy.getRightColor());
-		assertPiecesAreEqual(cube.getFrontColor(), copy.getTopColor());
-		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getTopColor()), copy.getFrontColor());
+		assertPiecesAreEqual(cube.getRightFace(), copy.getRightFace());
+		assertPiecesAreEqual(cube.getFrontFace(), copy.getTopFace());
+		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getTopFace()), copy.getFrontFace());
 	}
 
 	/**
@@ -115,9 +115,9 @@ public class CubeTest {
 	public void rotatingCubeYShouldChangeOrientationCorrectly() throws CubeException {
 		Cube copy = cube.copy();
 		copy.rotateY(true, 1);
-		assertPiecesAreEqual(cube.getTopColor(), copy.getTopColor());
-		assertPiecesAreEqual(cube.getRightColor(), copy.getFrontColor());
-		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getFrontColor()), copy.getRightColor());
+		assertPiecesAreEqual(cube.getTopFace(), copy.getTopFace());
+		assertPiecesAreEqual(cube.getRightFace(), copy.getFrontFace());
+		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getFrontFace()), copy.getRightFace());
 	}
 
 	/**
@@ -128,9 +128,9 @@ public class CubeTest {
 	public void rotatingCubeZShouldChangeOrientationCorrectly() throws CubeException {
 		Cube copy = cube.copy();
 		copy.rotateZ(true, 1);
-		assertPiecesAreEqual(cube.getFrontColor(), copy.getFrontColor());
-		assertPiecesAreEqual(cube.getTopColor(), copy.getRightColor());
-		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getRightColor()), copy.getTopColor());
+		assertPiecesAreEqual(cube.getFrontFace(), copy.getFrontFace());
+		assertPiecesAreEqual(cube.getTopFace(), copy.getRightFace());
+		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getRightFace()), copy.getTopFace());
 	}
 
 	@Test
