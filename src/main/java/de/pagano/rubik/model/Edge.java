@@ -4,17 +4,17 @@ import java.util.Objects;
 
 public class Edge {
 
-	private EColor[] faces;
+	private EFace[] faces;
 
-	public Edge(EColor firstFace, EColor secondFace) {
-		faces = new EColor[] { firstFace, secondFace };
+	public Edge(EFace firstFace, EFace secondFace) {
+		faces = new EFace[] { firstFace, secondFace };
 	}
 
-	public EColor getFirstFace() {
+	public EFace getFirstFace() {
 		return faces[0];
 	}
 
-	public EColor getSecondFace() {
+	public EFace getSecondFace() {
 		return faces[1];
 	}
 

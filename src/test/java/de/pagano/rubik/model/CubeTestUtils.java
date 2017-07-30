@@ -15,12 +15,12 @@ public class CubeTestUtils {
 	}
 
 	/** Asserts that the provided pieces (i.e. colors) are equal. */
-	public static void assertPiecesAreEqual(EColor firstPiece, EColor secondPiece) {
+	public static void assertPiecesAreEqual(EFace firstPiece, EFace secondPiece) {
 		Assert.assertTrue("Pieces are not equal: " + firstPiece + " & " + secondPiece,
 				piecesAreEqual(firstPiece, secondPiece));
 	}
 
-	private static boolean piecesAreEqual(EColor firstPiece, EColor secondPiece) {
+	private static boolean piecesAreEqual(EFace firstPiece, EFace secondPiece) {
 		return (firstPiece.equals(secondPiece));
 	}
 
@@ -28,7 +28,7 @@ public class CubeTestUtils {
 	 * Asserts that the provided face has the specified colors. The order of the
 	 * colors is line-based from left to right and top to bottom.
 	 */
-	public static void assertFaceEquals(Face face, EColor... colors) throws CubeException {
+	public static void assertFaceEquals(Face face, EFace... colors) throws CubeException {
 		Assert.assertEquals(face.getNumberOfPieces(), colors.length);
 		int c = 0;
 		for (int x = 0; x < 3; x++) {
@@ -42,8 +42,8 @@ public class CubeTestUtils {
 	/** Asserts that the provided cubes are equal. */
 	public static void assertCubesAreEqual(Cube firstCube, Cube secondCube) throws CubeException {
 		for (int faceIndex = 0; faceIndex < 6; faceIndex++) {
-			assertFacesAreEqual(firstCube.getFace(EColor.getColor(faceIndex)),
-					secondCube.getFace(EColor.getColor(faceIndex)));
+			assertFacesAreEqual(firstCube.getFace(EFace.getFace(faceIndex)),
+					secondCube.getFace(EFace.getFace(faceIndex)));
 		}
 	}
 

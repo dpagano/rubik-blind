@@ -18,17 +18,17 @@ public class FaceTest {
 	/** Sets up {@link #face} and {@link #multiColoredFace}. */
 	@Before
 	public void before() throws CubeException {
-		face = new Face(EColor.WHITE);
-		multiColoredFace = new Face(EColor.WHITE);
-		multiColoredFace.setPiece(0, 0, EColor.WHITE);
-		multiColoredFace.setPiece(0, 1, EColor.GREEN);
-		multiColoredFace.setPiece(0, 2, EColor.ORANGE);
-		multiColoredFace.setPiece(1, 0, EColor.BLUE);
-		multiColoredFace.setPiece(1, 1, EColor.RED);
-		multiColoredFace.setPiece(1, 2, EColor.YELLOW);
-		multiColoredFace.setPiece(2, 0, EColor.YELLOW);
-		multiColoredFace.setPiece(2, 1, EColor.ORANGE);
-		multiColoredFace.setPiece(2, 2, EColor.RED);
+		face = new Face(EFace.TOP);
+		multiColoredFace = new Face(EFace.TOP);
+		multiColoredFace.setPiece(0, 0, EFace.TOP);
+		multiColoredFace.setPiece(0, 1, EFace.FRONT);
+		multiColoredFace.setPiece(0, 2, EFace.LEFT);
+		multiColoredFace.setPiece(1, 0, EFace.BACK);
+		multiColoredFace.setPiece(1, 1, EFace.RIGHT);
+		multiColoredFace.setPiece(1, 2, EFace.BOTTOM);
+		multiColoredFace.setPiece(2, 0, EFace.BOTTOM);
+		multiColoredFace.setPiece(2, 1, EFace.LEFT);
+		multiColoredFace.setPiece(2, 2, EFace.RIGHT);
 	}
 
 	/** Tests that the copied face has the same colors as the original face. */
@@ -40,15 +40,15 @@ public class FaceTest {
 	/** Tests that setting and getting pieces works correctly. */
 	@Test
 	public void faceShouldGetAndSetCorrectColor() throws CubeException {
-		face.setPiece(2, 1, EColor.RED);
-		assertPiecesAreEqual(face.getPiece(2, 1), EColor.RED);
-		assertPiecesAreEqual(face.getPiece(0, 0), EColor.WHITE);
+		face.setPiece(2, 1, EFace.RIGHT);
+		assertPiecesAreEqual(face.getPiece(2, 1), EFace.RIGHT);
+		assertPiecesAreEqual(face.getPiece(0, 0), EFace.TOP);
 	}
 
 	/** Tests that setting a piece out of bounds throws an exception. */
 	@Test(expected = CubeException.class)
 	public void faceShouldThrowExceptionForSetPieceOutOfBounds() throws CubeException {
-		face.setPiece(3, 3, EColor.GREEN);
+		face.setPiece(3, 3, EFace.FRONT);
 	}
 
 	/** Tests that getting a piece out of bounds throws an exception. */

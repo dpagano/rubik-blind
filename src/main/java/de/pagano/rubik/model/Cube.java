@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 public class Cube {
 
 	/** The color of the face currently facing up. */
-	private EColor topFace;
+	private EFace topFace;
 
 	/** The color of the face currently facing to the front. */
-	private EColor frontFace;
+	private EFace frontFace;
 
 	/** The color of the face currently facing to the right. */
-	private EColor rightFace;
+	private EFace rightFace;
 
 	/** The faces of the cube. */
 	private final Face[] faces = new Face[6];
@@ -30,12 +30,12 @@ public class Cube {
 	/** Constructor. */
 	public Cube() throws CubeException {
 		for (int i = 0; i < 6; i++) {
-			faces[i] = new Face(EColor.getColor(i));
+			faces[i] = new Face(EFace.getFace(i));
 		}
 
-		topFace = EColor.WHITE;
-		frontFace = EColor.GREEN;
-		rightFace = EColor.RED;
+		topFace = EFace.TOP;
+		frontFace = EFace.FRONT;
+		rightFace = EFace.RIGHT;
 	}
 
 	/**
@@ -50,30 +50,30 @@ public class Cube {
 	}
 
 	/** Rotates the specified face. */
-	public void rotateFace(EColor face, boolean clockwise) throws CubeException {
-		faces[face.getValue()].rotate(clockwise);
+	public void rotateFace(EFace face, boolean clockwise) throws CubeException {
+		faces[face.getIndex()].rotate(clockwise);
 		rotateAdjacentFaces(face, clockwise);
 	}
 
-	public Face getFace(EColor centerColor) {
-		return faces[centerColor.getValue()];
+	public Face getFace(EFace centerColor) {
+		return faces[centerColor.getIndex()];
 	}
 
-	public EColor getTopColor() {
+	public EFace getTopColor() {
 		return topFace;
 	}
 
-	public EColor getFrontColor() {
+	public EFace getFrontColor() {
 		return frontFace;
 	}
 
-	public EColor getRightColor() {
+	public EFace getRightColor() {
 		return rightFace;
 	}
 
 	/** Rotates the adjacent pieces on the adjacent faces of the specified face. */
-	private void rotateAdjacentFaces(EColor face, boolean clockwise) throws CubeException {
-		List<EColor> adjacentFaces = new ArrayList<>(CubeOrientation.getAdjacentColors(face, !clockwise));
+	private void rotateAdjacentFaces(EFace face, boolean clockwise) throws CubeException {
+		List<EFace> adjacentFaces = new ArrayList<>(CubeOrientation.getAdjacentColors(face, !clockwise));
 
 		List<int[][]> indexesToRotate = adjacentFaces.stream().map(adjacentFace -> {
 			return getAdjacentIndexes(face, adjacentFace);
@@ -83,22 +83,22 @@ public class Cube {
 		// rotate
 		indexesToRotate.add(indexesToRotate.get(0));
 		adjacentFaces.add(adjacentFaces.get(0));
-		Face buffer = faces[adjacentFaces.get(0).getValue()].copy();
+		Face buffer = faces[adjacentFaces.get(0).getIndex()].copy();
 
 		for (int faceIndex = 0; faceIndex < 4; faceIndex++) {
-			EColor currentFaceColor = adjacentFaces.get(faceIndex);
+			EFace currentFaceColor = adjacentFaces.get(faceIndex);
 			int[][] currentIndexes = indexesToRotate.get(faceIndex);
 
-			EColor nextFaceColor = adjacentFaces.get(faceIndex + 1);
+			EFace nextFaceColor = adjacentFaces.get(faceIndex + 1);
 			int[][] nextIndexes = indexesToRotate.get(faceIndex + 1);
 
 			for (int i = 0; i < 3; i++) {
-				Face nextFace = faces[nextFaceColor.getValue()];
+				Face nextFace = faces[nextFaceColor.getIndex()];
 				if (faceIndex == 3) {
 					nextFace = buffer;
 				}
-				EColor nextColor = nextFace.getPiece(nextIndexes[i][0], nextIndexes[i][1]);
-				faces[currentFaceColor.getValue()].setPiece(currentIndexes[i][0], currentIndexes[i][1], nextColor);
+				EFace nextColor = nextFace.getPiece(nextIndexes[i][0], nextIndexes[i][1]);
+				faces[currentFaceColor.getIndex()].setPiece(currentIndexes[i][0], currentIndexes[i][1], nextColor);
 			}
 		}
 	}
@@ -109,33 +109,33 @@ public class Cube {
 	 */
 	// TODO (DP): This method should work with orientations, not colors. It should
 	// be possible to have a differently colored cube and still work with it.
-	private int[][] getAdjacentIndexes(EColor face, EColor adjacentFace) {
-		if (face == EColor.WHITE || face == EColor.GREEN && adjacentFace == EColor.WHITE
-				|| face == EColor.GREEN && adjacentFace == EColor.YELLOW) {
+	private int[][] getAdjacentIndexes(EFace face, EFace adjacentFace) {
+		if (face == EFace.TOP || face == EFace.FRONT && adjacentFace == EFace.TOP
+				|| face == EFace.FRONT && adjacentFace == EFace.BOTTOM) {
 			return new int[][] { { 0, 0 }, { 0, 1 }, { 0, 2 } };
 		}
 
-		if (face == EColor.YELLOW || face == EColor.BLUE && adjacentFace == EColor.WHITE
-				|| face == EColor.BLUE && adjacentFace == EColor.YELLOW) {
+		if (face == EFace.BOTTOM || face == EFace.BACK && adjacentFace == EFace.TOP
+				|| face == EFace.BACK && adjacentFace == EFace.BOTTOM) {
 			return new int[][] { { 2, 2 }, { 2, 1 }, { 2, 0 } };
 		}
-		if (face == EColor.ORANGE && adjacentFace == EColor.GREEN
-				|| face == EColor.ORANGE && adjacentFace == EColor.YELLOW) {
+		if (face == EFace.LEFT && adjacentFace == EFace.FRONT
+				|| face == EFace.LEFT && adjacentFace == EFace.BOTTOM) {
 			return new int[][] { { 0, 0 }, { 1, 0 }, { 2, 0 } };
 		}
 
-		if (face == EColor.GREEN && adjacentFace == EColor.ORANGE
-				|| face == EColor.ORANGE && adjacentFace == EColor.WHITE
-				|| face == EColor.ORANGE && adjacentFace == EColor.BLUE
-				|| face == EColor.BLUE && adjacentFace == EColor.RED
-				|| face == EColor.RED && adjacentFace == EColor.YELLOW
-				|| face == EColor.RED && adjacentFace == EColor.GREEN) {
+		if (face == EFace.FRONT && adjacentFace == EFace.LEFT
+				|| face == EFace.LEFT && adjacentFace == EFace.TOP
+				|| face == EFace.LEFT && adjacentFace == EFace.BACK
+				|| face == EFace.BACK && adjacentFace == EFace.RIGHT
+				|| face == EFace.RIGHT && adjacentFace == EFace.BOTTOM
+				|| face == EFace.RIGHT && adjacentFace == EFace.FRONT) {
 			return new int[][] { { 0, 2 }, { 1, 2 }, { 2, 2 } };
 		}
 
-		if (face == EColor.GREEN && adjacentFace == EColor.RED || face == EColor.BLUE && adjacentFace == EColor.ORANGE
-				|| face == EColor.RED && adjacentFace == EColor.WHITE
-				|| face == EColor.RED && adjacentFace == EColor.BLUE) {
+		if (face == EFace.FRONT && adjacentFace == EFace.RIGHT || face == EFace.BACK && adjacentFace == EFace.LEFT
+				|| face == EFace.RIGHT && adjacentFace == EFace.TOP
+				|| face == EFace.RIGHT && adjacentFace == EFace.BACK) {
 			return new int[][] { { 2, 0 }, { 1, 0 }, { 0, 0 } };
 		}
 
@@ -146,7 +146,7 @@ public class Cube {
 	// TODO (DP): Extract one method with "rotationFace" and other two params
 	/** Rotates the cube along the X axis. */
 	public void rotateX(boolean clockwise, int numberOfRotations) {
-		List<EColor> adjacentColorsClockwise = CubeOrientation.getAdjacentColors(rightFace, clockwise);
+		List<EFace> adjacentColorsClockwise = CubeOrientation.getAdjacentColors(rightFace, clockwise);
 		int currentTopFace = adjacentColorsClockwise.indexOf(topFace);
 		topFace = adjacentColorsClockwise.get((currentTopFace + 4 - numberOfRotations) % 4);
 		int currentFrontFace = adjacentColorsClockwise.indexOf(frontFace);
@@ -155,7 +155,7 @@ public class Cube {
 
 	/** Rotates the cube along the Y axis. */
 	public void rotateY(boolean clockwise, int numberOfRotations) {
-		List<EColor> adjacentColorsClockwise = CubeOrientation.getAdjacentColors(topFace, clockwise);
+		List<EFace> adjacentColorsClockwise = CubeOrientation.getAdjacentColors(topFace, clockwise);
 		int currentRightFace = adjacentColorsClockwise.indexOf(rightFace);
 		rightFace = adjacentColorsClockwise.get((currentRightFace + 4 - numberOfRotations) % 4);
 		int currentFrontFace = adjacentColorsClockwise.indexOf(frontFace);
@@ -164,7 +164,7 @@ public class Cube {
 
 	/** Rotates the cube along the Z axis. */
 	public void rotateZ(boolean clockwise, int numberOfRotations) {
-		List<EColor> adjacentColorsClockwise = CubeOrientation.getAdjacentColors(frontFace, clockwise);
+		List<EFace> adjacentColorsClockwise = CubeOrientation.getAdjacentColors(frontFace, clockwise);
 		int currentRightFace = adjacentColorsClockwise.indexOf(rightFace);
 		rightFace = adjacentColorsClockwise.get((currentRightFace + 4 - numberOfRotations) % 4);
 		int currentTopFace = adjacentColorsClockwise.indexOf(topFace);
@@ -245,7 +245,7 @@ public class Cube {
 	 * Performs the given number of rotations around the specified face in the
 	 * specified direction.
 	 */
-	private void performRotation(EColor rotationFace, boolean clockwise, int numberOfRotations) throws CubeException {
+	private void performRotation(EFace rotationFace, boolean clockwise, int numberOfRotations) throws CubeException {
 		for (int i = 0; i < numberOfRotations; i++) {
 			rotateFace(rotationFace, clockwise);
 		}
@@ -302,22 +302,22 @@ public class Cube {
 	}
 
 	/** Gets the edge at the position specified by the two given colors. */
-	public Edge getEdgeAt(EColor firstColor, EColor secondColor) throws CubeException {
+	public Edge getEdgeAt(EFace firstColor, EFace secondColor) throws CubeException {
 		// TODO (DP): fix bug
 		System.out.println("Getting edge at " + firstColor + " & " + secondColor);
 		int[][] adjacentIndexesForFirstColor = getAdjacentIndexes(firstColor, secondColor);
 		System.out.println("Adjacent indexes for " + firstColor + ": " + arrayString(adjacentIndexesForFirstColor));
 
-		Face secondFace = faces[secondColor.getValue()];
-		EColor secondEdgeColor = secondFace.getPiece(adjacentIndexesForFirstColor[1][0],
+		Face secondFace = faces[secondColor.getIndex()];
+		EFace secondEdgeColor = secondFace.getPiece(adjacentIndexesForFirstColor[1][0],
 				adjacentIndexesForFirstColor[1][1]);
 
 		int[][] adjacentIndexesForSecondColor = getAdjacentIndexes(secondColor, firstColor);
 		System.out.println("Adjacent indexes for " + secondColor + ": " + arrayString(adjacentIndexesForSecondColor));
 
 		// TODO (DP): Extract accessor
-		Face firstFace = faces[firstColor.getValue()];
-		EColor firstEdgeColor = firstFace.getPiece(adjacentIndexesForSecondColor[1][0],
+		Face firstFace = faces[firstColor.getIndex()];
+		EFace firstEdgeColor = firstFace.getPiece(adjacentIndexesForSecondColor[1][0],
 				adjacentIndexesForSecondColor[1][1]);
 
 		Edge edge = new Edge(firstEdgeColor, secondEdgeColor);
@@ -365,7 +365,7 @@ public class Cube {
 
 		System.out.println(myCube);
 
-		Edge edge = myCube.getEdgeAt(EColor.ORANGE, EColor.GREEN);
+		Edge edge = myCube.getEdgeAt(EFace.LEFT, EFace.FRONT);
 		System.out.println(edge);
 	}
 }

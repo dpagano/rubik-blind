@@ -1,17 +1,17 @@
 package de.pagano.rubik.model;
 
 /** The faces of a cube. */
-public enum EFace {
+public enum E_Face {
 	TOP(0), FRONT(1), LEFT(2), BACK(3), RIGHT(4), BOTTOM(5);
 
-	/** The index of the face. Used to order the faces. */
+	/** The index of the face. Used to order the faces among them. */
 	private final int index;
 
-	/** The faces in order. */
-	private static final EFace[] FACES = { TOP, FRONT, LEFT, BACK, RIGHT, BOTTOM };
+	/** The face order. */
+	private static final E_Face[] FACES = { TOP, FRONT, LEFT, BACK, RIGHT, BOTTOM };
 
 	/** Constructor. */
-	private EFace(int index) {
+	private E_Face(int index) {
 		this.index = index;
 	}
 
@@ -20,8 +20,8 @@ public enum EFace {
 		return index;
 	}
 
-	/** Gets the face at the specific index. */
-	public static EFace getFace(int index) {
+	/** Gets the {@link E_Face} for the specified face index. */
+	public static E_Face getOrientation(int index) {
 		return FACES[index];
 	}
 
@@ -29,4 +29,5 @@ public enum EFace {
 	public String toString() {
 		return name();
 	}
+
 }

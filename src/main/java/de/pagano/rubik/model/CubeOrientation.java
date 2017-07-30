@@ -9,46 +9,46 @@ import java.util.List;
 public class CubeOrientation {
 
 	/** Gets the opposite color of the specified color. */
-	public static EColor getOppositeFace(EColor color) throws CubeException {
+	public static EFace getOppositeFace(EFace color) throws CubeException {
 		switch (color) {
-		case WHITE:
-			return EColor.YELLOW;
-		case GREEN:
-			return EColor.BLUE;
-		case ORANGE:
-			return EColor.RED;
-		case BLUE:
-			return EColor.GREEN;
-		case RED:
-			return EColor.ORANGE;
-		case YELLOW:
-			return EColor.WHITE;
+		case TOP:
+			return EFace.BOTTOM;
+		case FRONT:
+			return EFace.BACK;
+		case LEFT:
+			return EFace.RIGHT;
+		case BACK:
+			return EFace.FRONT;
+		case RIGHT:
+			return EFace.LEFT;
+		case BOTTOM:
+			return EFace.TOP;
 		default:
 			throw new CubeException("Unknown color: " + color);
 		}
 	}
 
 	/** Gets the adjacent colors of the specified face in the specified order. */
-	public static List<EColor> getAdjacentColors(EColor face, boolean clockwise) {
-		List<EColor> colors;
+	public static List<EFace> getAdjacentColors(EFace face, boolean clockwise) {
+		List<EFace> colors;
 		switch (face) {
-		case WHITE:
-			colors = Arrays.asList(EColor.GREEN, EColor.ORANGE, EColor.BLUE, EColor.RED);
+		case TOP:
+			colors = Arrays.asList(EFace.FRONT, EFace.LEFT, EFace.BACK, EFace.RIGHT);
 			break;
-		case GREEN:
-			colors = Arrays.asList(EColor.WHITE, EColor.RED, EColor.YELLOW, EColor.ORANGE);
+		case FRONT:
+			colors = Arrays.asList(EFace.TOP, EFace.RIGHT, EFace.BOTTOM, EFace.LEFT);
 			break;
-		case ORANGE:
-			colors = Arrays.asList(EColor.WHITE, EColor.GREEN, EColor.YELLOW, EColor.BLUE);
+		case LEFT:
+			colors = Arrays.asList(EFace.TOP, EFace.FRONT, EFace.BOTTOM, EFace.BACK);
 			break;
-		case BLUE:
-			colors = Arrays.asList(EColor.WHITE, EColor.ORANGE, EColor.YELLOW, EColor.RED);
+		case BACK:
+			colors = Arrays.asList(EFace.TOP, EFace.LEFT, EFace.BOTTOM, EFace.RIGHT);
 			break;
-		case RED:
-			colors = Arrays.asList(EColor.WHITE, EColor.BLUE, EColor.YELLOW, EColor.GREEN);
+		case RIGHT:
+			colors = Arrays.asList(EFace.TOP, EFace.BACK, EFace.BOTTOM, EFace.FRONT);
 			break;
-		case YELLOW:
-			colors = Arrays.asList(EColor.GREEN, EColor.RED, EColor.BLUE, EColor.ORANGE);
+		case BOTTOM:
+			colors = Arrays.asList(EFace.FRONT, EFace.RIGHT, EFace.BACK, EFace.LEFT);
 			break;
 		default:
 			colors = Arrays.asList();
