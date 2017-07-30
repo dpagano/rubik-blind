@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import de.pagano.rubik.model.colors.DefaultCubeColorSchema;
@@ -227,49 +226,6 @@ public class Cube {
 		for (int i = 0; i < numberOfRotations; i++) {
 			rotateFace(rotationFace, clockwise);
 		}
-	}
-
-	/** Scrambles the cube. */
-	public String scramble(int scrambleLength, boolean extended, double doubleMoveProbability) throws CubeException {
-		// TODO (DP): Extract moves into EMove and use those constants
-		String moves = "UDFBRL";
-		String extendedMoves = "MES";
-		if (extended) {
-			moves += extendedMoves;
-		}
-
-		String scrambleString = "";
-		Random random = new Random();
-		int i = 0;
-		String lastMove = "";
-		while (i < scrambleLength) {
-			int nextMoveIndex = random.nextInt(moves.length());
-			String nextMove = moves.substring(nextMoveIndex, nextMoveIndex + 1);
-
-			if (nextMove.equals(lastMove)) {
-				continue;
-			}
-
-			lastMove = nextMove;
-
-			if (random.nextDouble() <= 0.5) {
-				nextMove += "'";
-			}
-
-			if (random.nextDouble() <= doubleMoveProbability) {
-				if (nextMove.endsWith("'")) {
-					nextMove = nextMove.substring(0, nextMove.length() - 1);
-				}
-				nextMove += "2";
-			}
-			scrambleString += nextMove + " ";
-
-			i++;
-		}
-
-		move(scrambleString);
-
-		return scrambleString;
 	}
 
 	/**
