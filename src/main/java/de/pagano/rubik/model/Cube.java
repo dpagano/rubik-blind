@@ -185,53 +185,54 @@ public class Cube {
 
 	/** Interprets the provided move on the cube and performs it. */
 	private void performSingleMove(String move) throws CubeException {
-		boolean clockwise = !move.endsWith(Move.MODIFIER_REVERSE);
+		boolean clockwise = !move.endsWith(Move.MODIFIER_REVERSE.toString());
 		int numberOfRotations = 1;
-		if (move.endsWith(Move.MODIFIER_DOUBLE)) {
+		if (move.endsWith(Move.MODIFIER_DOUBLE.toString())) {
 			numberOfRotations = 2;
 		}
 		String firstLetter = move.substring(0, 1);
-		switch (firstLetter) {
-		case Move.UP:
+		Move interpretedMove = Move.fromString(firstLetter);
+		switch (interpretedMove) {
+		case UP:
 			performRotation(topFace, clockwise, numberOfRotations);
 			break;
-		case Move.DOWN:
+		case DOWN:
 			performRotation(CubeOrientation.getOppositeFace(topFace), clockwise, numberOfRotations);
 			break;
-		case Move.FRONT:
+		case FRONT:
 			performRotation(frontFace, clockwise, numberOfRotations);
 			break;
-		case Move.BACK:
+		case BACK:
 			performRotation(CubeOrientation.getOppositeFace(frontFace), clockwise, numberOfRotations);
 			break;
-		case Move.RIGHT:
+		case RIGHT:
 			performRotation(rightFace, clockwise, numberOfRotations);
 			break;
-		case Move.LEFT:
+		case LEFT:
 			performRotation(CubeOrientation.getOppositeFace(rightFace), clockwise, numberOfRotations);
 			break;
-		case Move.MIDDLE:
+		case MIDDLE:
 			performRotation(rightFace, clockwise, numberOfRotations);
 			performRotation(CubeOrientation.getOppositeFace(rightFace), !clockwise, numberOfRotations);
 			rotateX(!clockwise, numberOfRotations);
 			break;
-		case Move.EQUATORIAL:
+		case EQUATORIAL:
 			performRotation(topFace, clockwise, numberOfRotations);
 			performRotation(CubeOrientation.getOppositeFace(topFace), !clockwise, numberOfRotations);
 			rotateY(!clockwise, numberOfRotations);
 			break;
-		case Move.STANDING:
+		case STANDING:
 			performRotation(frontFace, !clockwise, numberOfRotations);
 			performRotation(CubeOrientation.getOppositeFace(frontFace), clockwise, numberOfRotations);
 			rotateZ(clockwise, numberOfRotations);
 			break;
-		case Move.X:
+		case X:
 			rotateX(clockwise, numberOfRotations);
 			break;
-		case Move.Y:
+		case Y:
 			rotateY(clockwise, numberOfRotations);
 			break;
-		case Move.Z:
+		case Z:
 			rotateZ(clockwise, numberOfRotations);
 			break;
 		default:
@@ -353,8 +354,8 @@ public class Cube {
 		// System.out.println(myCube.frontFace);
 		// System.out.println(myCube.rightFace);
 
-		// myCube.interpret("R U R' U' R' F R2 U' R' U' R U R' F'");
-		// System.out.println(myCube);
+		myCube.move("R U R' U' R' F R2 U' R' U' R U R' F'");
+		System.out.println(myCube);
 
 		// myCube.interpret("R U R' U' R' F R2 U' R' U' R U R' F'");
 		System.out.println(myCube);

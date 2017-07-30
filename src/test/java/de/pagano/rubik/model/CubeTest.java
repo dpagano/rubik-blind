@@ -133,6 +133,21 @@ public class CubeTest {
 		assertPiecesAreEqual(CubeOrientation.getOppositeFace(cube.getRightColor()), copy.getTopColor());
 	}
 
+	@Test
+	public void performingPLLMoveShouldYieldCorrectResult() throws CubeException {
+		cube.move("R U R' U' R' F R2 U' R' U' R U R' F'");
+		assertFaceEquals(cube.getFace(EColor.WHITE), getArrayOfSameColor(EColor.WHITE, 9));
+		assertFaceEquals(cube.getFace(EColor.GREEN), EColor.GREEN, EColor.GREEN, EColor.RED, EColor.GREEN, EColor.GREEN,
+				EColor.GREEN, EColor.GREEN, EColor.GREEN, EColor.GREEN);
+		assertFaceEquals(cube.getFace(EColor.ORANGE), EColor.ORANGE, EColor.RED, EColor.ORANGE, EColor.ORANGE,
+				EColor.ORANGE, EColor.ORANGE, EColor.ORANGE, EColor.ORANGE, EColor.ORANGE);
+		assertFaceEquals(cube.getFace(EColor.BLUE), EColor.RED, EColor.BLUE, EColor.BLUE, EColor.BLUE, EColor.BLUE,
+				EColor.BLUE, EColor.BLUE, EColor.BLUE, EColor.BLUE);
+		assertFaceEquals(cube.getFace(EColor.RED), EColor.BLUE, EColor.ORANGE, EColor.GREEN, EColor.RED, EColor.RED,
+				EColor.RED, EColor.RED, EColor.RED, EColor.RED);
+		assertFaceEquals(cube.getFace(EColor.YELLOW), getArrayOfSameColor(EColor.YELLOW, 9));
+	}
+
 	/** Gets an {@link EColor} array of the specified color and size. */
 	private EColor[] getArrayOfSameColor(EColor color, int size) {
 		EColor[] colors = new EColor[size];

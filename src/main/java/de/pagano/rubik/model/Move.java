@@ -1,24 +1,25 @@
 package de.pagano.rubik.model;
 
-public class Move {
-	// TODO (DP): Change that into an enumeration, and provide a helper method to
-	// convert from and to string
-	public static final String UP = "U";
-	public static final String DOWN = "D";
-	public static final String FRONT = "F";
-	public static final String BACK = "B";
-	public static final String RIGHT = "R";
-	public static final String LEFT = "L";
+import java.util.Arrays;
+import java.util.List;
 
-	public static final String MIDDLE = "M";
-	public static final String EQUATORIAL = "E";
-	public static final String STANDING = "S";
+public enum Move {
+	UP, DOWN, FRONT, BACK, RIGHT, LEFT, MIDDLE, EQUATORIAL, STANDING, X, Y, Z, MODIFIER_DOUBLE, MODIFIER_REVERSE;
 
-	public static final String X = "X";
-	public static final String Y = "Y";
-	public static final String Z = "Z";
+	private static final List<Move> moves = Arrays.asList(UP, DOWN, FRONT, BACK, RIGHT, LEFT, MIDDLE, EQUATORIAL,
+			STANDING, X, Y, Z, MODIFIER_DOUBLE, MODIFIER_REVERSE);
+	private static final List<String> moveStrings = Arrays.asList("U", "D", "F", "B", "R", "L", "M", "E", "S", "X", "Y",
+			"Z", "2", "'");
 
-	public static final String MODIFIER_DOUBLE = "2";
-	public static final String MODIFIER_REVERSE = "'";
+	@Override
+	public String toString() {
+		int moveIndex = moves.indexOf(this);
+		return moveStrings.get(moveIndex);
+	}
+
+	public static Move fromString(String move) {
+		int moveIndex = moveStrings.indexOf(move);
+		return moves.get(moveIndex);
+	}
 
 }
