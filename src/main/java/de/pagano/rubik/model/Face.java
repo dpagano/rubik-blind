@@ -1,5 +1,7 @@
 package de.pagano.rubik.model;
 
+import de.pagano.rubik.model.colors.EColor;
+
 /** A face of a 3x3 cube. */
 public class Face {
 	/** The pieces of the face as a two-dimensional array. */

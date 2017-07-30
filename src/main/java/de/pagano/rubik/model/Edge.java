@@ -1,5 +1,7 @@
 package de.pagano.rubik.model;
 
+import de.pagano.rubik.model.colors.EColor;
+
 /** An edge is a combination of two colors. */
 public class Edge extends AbstractEdge<EColor> {
 

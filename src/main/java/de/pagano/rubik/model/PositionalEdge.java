@@ -1,5 +1,7 @@
 package de.pagano.rubik.model;
 
+import de.pagano.rubik.model.colors.ICubeColorSchema;
+
 /** A positional edge is a combination of two faces. */
 public class PositionalEdge extends AbstractEdge<EFace> {
 

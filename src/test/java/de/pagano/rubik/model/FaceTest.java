@@ -6,6 +6,8 @@ import static de.pagano.rubik.model.CubeTestUtils.assertPiecesAreEqual;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.pagano.rubik.model.colors.EColor;
+
 /** Tests for a cube face. */
 public class FaceTest {
 

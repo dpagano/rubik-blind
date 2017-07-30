@@ -7,6 +7,9 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import de.pagano.rubik.model.colors.DefaultCubeColorSchema;
+import de.pagano.rubik.model.colors.EColor;
+import de.pagano.rubik.model.colors.ICubeColorSchema;
 import de.pagano.rubik.model.moves.EMove;
 
 /**

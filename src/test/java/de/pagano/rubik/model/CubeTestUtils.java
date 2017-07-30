@@ -6,6 +6,9 @@ import java.util.stream.Stream;
 
 import org.junit.Assert;
 
+import de.pagano.rubik.model.colors.EColor;
+import de.pagano.rubik.model.colors.ICubeColorSchema;
+
 /** Utils for testing cubes and faces. */
 public class CubeTestUtils {
 

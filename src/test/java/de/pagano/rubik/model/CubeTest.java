@@ -10,6 +10,9 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.pagano.rubik.model.colors.EColor;
+import de.pagano.rubik.model.colors.ICubeColorSchema;
+
 /** Tests for a cube. */
 public class CubeTest {
 
