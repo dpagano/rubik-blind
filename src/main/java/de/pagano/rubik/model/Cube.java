@@ -270,6 +270,14 @@ public class Cube {
 		return s;
 	}
 
+	/**
+	 * Looks up the provided edge position and returns an edge with the
+	 * corresponding colors.
+	 */
+	public Edge getEdge(EdgePosition position) {
+		return new Edge(colorSchema.getColor(position.getFirstFace()), colorSchema.getColor(position.getSecondFace()));
+	}
+
 	@Override
 	public String toString() {
 		Optional<String> cubeString = Arrays.stream(faces).map(face -> face.toString())
