@@ -73,9 +73,6 @@ public class CubeGeometry {
 				|| face == EFace.BACK && adjacentFace == EFace.BOTTOM) {
 			return new int[][] { { 2, 2 }, { 2, 1 }, { 2, 0 } };
 		}
-		if (false) {
-			return new int[][] { { 0, 0 }, { 1, 0 }, { 2, 0 } };
-		}
 
 		if (face == EFace.FRONT && adjacentFace == EFace.LEFT || face == EFace.LEFT && adjacentFace == EFace.TOP
 				|| face == EFace.LEFT && adjacentFace == EFace.BACK || face == EFace.BACK && adjacentFace == EFace.RIGHT
