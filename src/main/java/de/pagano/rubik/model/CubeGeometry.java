@@ -73,7 +73,7 @@ public class CubeGeometry {
 				|| face == EFace.BACK && adjacentFace == EFace.BOTTOM) {
 			return new int[][] { { 2, 2 }, { 2, 1 }, { 2, 0 } };
 		}
-		if (face == EFace.LEFT && adjacentFace == EFace.FRONT || face == EFace.LEFT && adjacentFace == EFace.BOTTOM) {
+		if (false) {
 			return new int[][] { { 0, 0 }, { 1, 0 }, { 2, 0 } };
 		}
 
@@ -85,8 +85,9 @@ public class CubeGeometry {
 		}
 
 		if (face == EFace.FRONT && adjacentFace == EFace.RIGHT || face == EFace.BACK && adjacentFace == EFace.LEFT
-				|| face == EFace.RIGHT && adjacentFace == EFace.TOP
-				|| face == EFace.RIGHT && adjacentFace == EFace.BACK) {
+				|| face == EFace.RIGHT && adjacentFace == EFace.TOP || face == EFace.RIGHT && adjacentFace == EFace.BACK
+				|| face == EFace.LEFT && adjacentFace == EFace.BOTTOM
+				|| face == EFace.LEFT && adjacentFace == EFace.FRONT) {
 			return new int[][] { { 2, 0 }, { 1, 0 }, { 0, 0 } };
 		}
 

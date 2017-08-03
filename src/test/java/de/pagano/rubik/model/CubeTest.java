@@ -164,6 +164,27 @@ public class CubeTest {
 				getArrayOfSameFaces(EFace.BOTTOM, 9));
 	}
 
+	/**
+	 * Tests that performing a complex sequence of moves yields the expected
+	 * outcome.
+	 */
+	@Test
+	public void performingBigMoveShouldYieldCorrectResult() throws CubeException {
+		cube.move("F2 D' B' D' L' B F2 U2 R' D' F' R2 B2 U B2 D' R2 U2 F' D' L' D2 R F' R'");
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.TOP), cube.getColorSchema(), EFace.BACK, EFace.LEFT,
+				EFace.BOTTOM, EFace.RIGHT, EFace.TOP, EFace.BACK, EFace.RIGHT, EFace.LEFT, EFace.TOP);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.FRONT), cube.getColorSchema(), EFace.RIGHT, EFace.BACK,
+				EFace.LEFT, EFace.RIGHT, EFace.FRONT, EFace.TOP, EFace.TOP, EFace.TOP, EFace.RIGHT);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.LEFT), cube.getColorSchema(), EFace.FRONT, EFace.BOTTOM,
+				EFace.BACK, EFace.RIGHT, EFace.LEFT, EFace.BOTTOM, EFace.FRONT, EFace.FRONT, EFace.FRONT);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.BACK), cube.getColorSchema(), EFace.BOTTOM, EFace.TOP,
+				EFace.LEFT, EFace.RIGHT, EFace.BACK, EFace.TOP, EFace.LEFT, EFace.BOTTOM, EFace.LEFT);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.RIGHT), cube.getColorSchema(), EFace.TOP, EFace.FRONT,
+				EFace.FRONT, EFace.FRONT, EFace.RIGHT, EFace.BACK, EFace.TOP, EFace.LEFT, EFace.BACK);
+		assertFaceEqualsColorsForSchema(cube.getFace(EFace.BOTTOM), cube.getColorSchema(), EFace.RIGHT, EFace.BACK,
+				EFace.BACK, EFace.BOTTOM, EFace.BOTTOM, EFace.FRONT, EFace.BOTTOM, EFace.LEFT, EFace.BOTTOM);
+	}
+
 	/** Gets an {@link EColor} array of the specified color and size. */
 	private EColor[] getArrayOfSameColorForColorSchema(ICubeColorSchema colorSchema, EFace face, int size) {
 		return getArrayOfSameColor(colorSchema.getColor(face), size);

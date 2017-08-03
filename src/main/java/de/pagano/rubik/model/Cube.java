@@ -230,10 +230,16 @@ public class Cube {
 
 	/**
 	 * Takes the colors of the given edge and translates them into faces on this
-	 * cube. Gets the edge sitting at this position.
+	 * cube. This translation is done based on the invariant colors of each face,
+	 * using the {@link #colorSchema}. Gets the edge sitting at this position.
 	 */
-	public Edge getEdgeAt(Edge edge) throws CubeException {
+	public Edge getEdgeByColors(Edge edge) throws CubeException {
 		return getEdgeAt(colorSchema.getFace(edge.getFirstColor()), colorSchema.getFace(edge.getSecondColor()));
+	}
+
+	/** Gets the edge currently lying at the specified edge position. */
+	public Edge getEdgeAt(EdgePosition position) throws CubeException {
+		return getEdgeAt(position.getFirstFace(), position.getSecondFace());
 	}
 
 	/** Gets the edge at the position specified by the two given faces. */
@@ -270,14 +276,6 @@ public class Cube {
 		return s;
 	}
 
-	/**
-	 * Looks up the provided edge position and returns an edge with the
-	 * corresponding colors.
-	 */
-	public Edge getEdge(EdgePosition position) {
-		return new Edge(colorSchema.getColor(position.getFirstFace()), colorSchema.getColor(position.getSecondFace()));
-	}
-
 	@Override
 	public String toString() {
 		Optional<String> cubeString = Arrays.stream(faces).map(face -> face.toString())
@@ -289,10 +287,13 @@ public class Cube {
 	public static void main(String[] args) throws CubeException {
 		Cube myCube = new Cube();
 
-		myCube.move("R U R' U' R' F R2 U' R' U' R U R' F'");
+		myCube.move("F2 D' B' D' L' B F2 U2 R' D' F' R2 B2 U B2 D' R2 U2 F' D' L' D2 R F' R'");
+		// myCube.move("F2 D' B' D' L'");
+
+		// myCube.move("R U R' U' R' F R2 U' R' U' R U R' F'");
 		System.out.println(myCube);
 
-		Edge edge = myCube.getEdgeAt(EFace.LEFT, EFace.FRONT);
-		System.out.println(edge);
+		// Edge edge = myCube.getEdgeAt(EFace.LEFT, EFace.FRONT);
+		// System.out.println(edge);
 	}
 }
