@@ -1,6 +1,6 @@
 package de.pagano.rubik.model;
 
-/** The position of an edge. A combination of two faces. */
+/** The position of an edge. This is a combination of two faces. */
 public class EdgePosition {
 
 	/** The first face of the position. */
