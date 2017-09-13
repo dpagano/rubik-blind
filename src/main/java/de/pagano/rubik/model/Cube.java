@@ -19,6 +19,7 @@ import de.pagano.rubik.model.moves.EMove;
  */
 public class Cube {
 
+	// TODO (DP): Clean up
 	/** The face currently facing up. */
 	private EFace topFace;
 
