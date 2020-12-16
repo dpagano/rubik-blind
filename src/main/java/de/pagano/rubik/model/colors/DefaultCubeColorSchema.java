@@ -7,6 +7,8 @@ import de.pagano.rubik.model.EFace;
 /** The default color schema of a 3x3 Rubik's cube. */
 public class DefaultCubeColorSchema implements ICubeColorSchema {
 	private static final TreeBidiMap<EFace, EColor> SCHEMA = new TreeBidiMap<>();
+	
+	// TODO: Test Comment for Teamscale
 
 	/** Constructor. */
 	public DefaultCubeColorSchema() {
