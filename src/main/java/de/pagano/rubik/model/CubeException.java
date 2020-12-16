@@ -16,6 +16,7 @@ public class CubeException extends Exception {
 
 	/** Constructor. */
 	public CubeException(Throwable cause) {
+		// TODO: Test comment
 		super(cause);
 	}
 
